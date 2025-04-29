@@ -1,11 +1,11 @@
-package io.github.simonreilich.entities;
+package io.github.simonreilich.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-public class Player extends Sprite {
+public class Player extends Sprite implements Drawable {
 
     private float cooldown;
     private Direction direction;
@@ -50,6 +50,11 @@ public class Player extends Sprite {
         }
         update(Gdx.graphics.getDeltaTime());
         super.draw(batch);
+    }
+
+    @Override
+    public void dispose() {
+        super.getTexture().dispose();
     }
 
     private void update(float delta) {

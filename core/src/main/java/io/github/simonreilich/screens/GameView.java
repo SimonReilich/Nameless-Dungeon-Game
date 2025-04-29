@@ -1,4 +1,4 @@
-package io.github.simonreilich.maps;
+package io.github.simonreilich.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -9,15 +9,21 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import io.github.simonreilich.entities.Player;
+import io.github.simonreilich.objects.Drawable;
+import io.github.simonreilich.objects.Player;
 
-public class Map implements Screen {
+import java.util.ArrayList;
+import java.util.List;
+
+public class GameView implements Screen, DrawQueue {
 
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera camera;
 
     private Player player;
+
+    private List<Drawable> draw;
 
     @Override
     public void show() {
@@ -30,6 +36,9 @@ public class Map implements Screen {
         camera.position.set(32 * 15, 32 * 10, 0);
 
         player = new Player(new Sprite(new Texture("sprites/player.png")));
+
+        draw = new ArrayList<Drawable>();
+        draw.add(player);
     }
 
     @Override
@@ -41,7 +50,9 @@ public class Map implements Screen {
         renderer.render();
 
         renderer.getBatch().begin();
-        player.draw(renderer.getBatch());
+        for (Drawable d : draw) {
+            d.draw(renderer.getBatch());
+        }
         renderer.getBatch().end();
     }
 
@@ -71,5 +82,40 @@ public class Map implements Screen {
     public void dispose() {
         map.dispose();
         renderer.dispose();
+    }
+
+    @Override
+    public void enqueue(Drawable drawable, long id) {
+
+    }
+
+    @Override
+    public void dequeue(long id) {
+
+    }
+
+    @Override
+    public void dequeueAll() {
+
+    }
+
+    @Override
+    public void dequeueAndDispose(long id) {
+
+    }
+
+    @Override
+    public void dequeueAndDisposeAll() {
+
+    }
+
+    @Override
+    public void prioritize(long id) {
+
+    }
+
+    @Override
+    public void deprioritize(long id) {
+
     }
 }

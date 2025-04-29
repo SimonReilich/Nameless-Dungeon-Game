@@ -1,37 +1,48 @@
 package io.github.simonreilich;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import io.github.simonreilich.entities.Player;
+import io.github.simonreilich.objects.Player;
 
 public class Controller extends InputAdapter {
 
-    private Player player;
+    private Model model;
 
-    public Controller(Player player) {
+    public Controller(Model model) {
         super();
-        this.player = player;
+        this.model = model;
     }
 
     @Override
     public boolean keyDown(int keycode) {
         switch (keycode) {
             case Input.Keys.W:
-                player.up();
+                model.up();
             case Input.Keys.A:
-                player.left();
+                model.left();
             case Input.Keys.S:
-                player.down();
+                model.down();
             case Input.Keys.D:
-                player.right();
+                model.right();
+            case Input.Keys.ESCAPE:
+                model.exit();
         }
         return super.keyDown(keycode);
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        return super.keyUp(keycode);
+        switch (keycode) {
+            case Input.Keys.W:
+                //
+            case Input.Keys.A:
+                //
+            case Input.Keys.S:
+                //
+            case Input.Keys.D:
+                //
+        }
+        return super.keyDown(keycode);
     }
 
 }

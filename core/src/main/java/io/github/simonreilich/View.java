@@ -1,12 +1,12 @@
 package io.github.simonreilich;
 
-import io.github.simonreilich.maps.Map;
+public class View extends com.badlogic.gdx.Game {
 
-public class Game extends com.badlogic.gdx.Game {
+    private Model model;
 
     @Override
     public void create() {
-        setScreen(new Map());
+        model = new Model(this);
     }
 
     @Override

@@ -1,0 +1,15 @@
+package io.github.simonreilich.screens;
+
+import io.github.simonreilich.objects.Drawable;
+
+public interface DrawQueue {
+
+    public void enqueue(Drawable drawable);
+    public void dequeue(Drawable drawable);
+    public void dequeueAll();
+    public void dequeueAndDispose(Drawable drawable);
+    public void dequeueAndDisposeAll();
+    public void prioritize(Drawable drawable);
+    public void deprioritize(Drawable drawable);
+
+}
