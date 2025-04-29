@@ -2,6 +2,8 @@ package io.github.simonreilich.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
@@ -19,37 +21,27 @@ public class Player extends Sprite implements Drawable {
 
     public void up() {
         direction = Direction.UP;
-        System.out.println("Up");
     }
 
     public void down() {
         direction = Direction.DOWN;
-        System.out.println("Down");
     }
 
     public void left() {
         direction = Direction.LEFT;
-        System.out.println("Left");
     }
 
     public void right() {
         direction = Direction.RIGHT;
-        System.out.println("Right");
     }
 
     @Override
-    public void draw(Batch batch) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
-            up();
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
-            left();
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
-            down();
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
-            right();
-        }
+    public void draw(OrthographicCamera cam, Batch batch) {
         update(Gdx.graphics.getDeltaTime());
+
+        batch.begin();
         super.draw(batch);
+        batch.end();
     }
 
     @Override

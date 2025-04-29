@@ -18,14 +18,19 @@ public class Controller extends InputAdapter {
         switch (keycode) {
             case Input.Keys.W:
                 model.up();
+                break;
             case Input.Keys.A:
                 model.left();
+                break;
             case Input.Keys.S:
                 model.down();
+                break;
             case Input.Keys.D:
                 model.right();
+                break;
             case Input.Keys.ESCAPE:
                 model.exit();
+                break;
         }
         return super.keyDown(keycode);
     }
