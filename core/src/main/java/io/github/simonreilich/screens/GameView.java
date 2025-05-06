@@ -29,6 +29,7 @@ public class GameView implements Screen, DrawQueue {
 
         camera = new OrthographicCamera();
         camera.position.set(32 * 15, 32 * 10, 0);
+        camera.zoom = 0.35f;
         batch = new SpriteBatch();
 
         draw = new ArrayList<>();

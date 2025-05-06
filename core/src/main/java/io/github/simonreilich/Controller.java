@@ -2,7 +2,6 @@ package io.github.simonreilich;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import io.github.simonreilich.objects.Player;
 
 public class Controller extends InputAdapter {
 
@@ -32,6 +31,7 @@ public class Controller extends InputAdapter {
                 model.exit();
                 break;
         }
+        model.update();
         return super.keyDown(keycode);
     }
 

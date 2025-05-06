@@ -1,9 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="2" nextobjectid="1">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="1">
  <tileset firstgid="1" name="test" tilewidth="32" tileheight="32" tilecount="2" columns="2">
   <image source="tileset.png" width="64" height="32"/>
+  <tile id="0">
+   <properties>
+    <property name="wakable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="wakable" type="bool" value="false"/>
+   </properties>
+  </tile>
  </tileset>
  <layer id="1" name="Kachelebene 1" width="30" height="20">
+  <properties>
+   <property name="spawnX" type="int" value="6"/>
+   <property name="spawnY" type="int" value="5"/>
+  </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,

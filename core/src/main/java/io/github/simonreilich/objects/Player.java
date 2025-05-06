@@ -39,6 +39,9 @@ public class Player extends Sprite implements Drawable {
     public void draw(OrthographicCamera cam, Batch batch) {
         update(Gdx.graphics.getDeltaTime());
 
+        cam.update();
+        batch.setProjectionMatrix(cam.combined);
+
         batch.begin();
         super.draw(batch);
         batch.end();
@@ -76,6 +79,22 @@ public class Player extends Sprite implements Drawable {
             }
             direction = Direction.NONE;
         }
+    }
+
+    public void setPosX(int x) {
+        setX(x * 32 + 4);
+    }
+
+    public void setPosY(int y) {
+        setY(y * 32);
+    }
+
+    public int getPosX() {
+        return (int) (getX() / 32);
+    }
+
+    public int getPosY() {
+        return (int) (getY() / 32);
     }
 }
 

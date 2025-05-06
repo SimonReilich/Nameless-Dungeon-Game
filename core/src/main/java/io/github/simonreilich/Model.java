@@ -7,12 +7,15 @@ import io.github.simonreilich.objects.Map;
 import io.github.simonreilich.objects.Player;
 import io.github.simonreilich.screens.GameView;
 
+import java.util.Random;
+
 public class Model {
 
     private View view;
     private Controller controller;
     private boolean isRunning;
     private GameView gameView;
+    private Map map;
     private Player player;
 
     public Model(View view) {
@@ -23,33 +26,53 @@ public class Model {
         this.view.setScreen(gameView);
         this.isRunning = true;
         this.player = new Player(new Sprite(new Texture("sprites/player.png")));
+        this.map = new Map("maps/testMap.tmx");
 
-        gameView.enqueue(new Map("maps/testMap.tmx"));
+        player.setPosX((Integer) map.getMap().getLayers().get(0).getProperties().get("spawnX"));
+        player.setPosY((Integer) map.getMap().getLayers().get(0).getProperties().get("spawnY"));
+
+        gameView.enqueue(map);
         gameView.enqueue(player);
-
-        // run();
     }
 
-    public void run() {
-        if (isRunning) {
-            run();
+    public void update() {
+            if (!map.inBounds(player.getPosX(), player.getPosY())) {
+                int dir = new Random().nextInt(4);
+                if (dir == 0) {
+                    up();
+                } else if (dir == 1) {
+                    down();
+                } else if (dir == 2) {
+                    left();
+                } else if (dir == 3) {
+                    right();
+                }
+
         }
     }
 
     public void up() {
-        player.up();
+        if (map.inBounds(player.getPosX(), player.getPosY() + 1)) {
+            player.up();
+        }
     }
 
     public void left() {
-        player.left();
+        if (map.inBounds(player.getPosX() - 1, player.getPosY())) {
+            player.left();
+        }
     }
 
     public void down() {
-        player.down();
+        if (map.inBounds(player.getPosX(), player.getPosY() - 1)) {
+            player.down();
+        }
     }
 
     public void right() {
-        player.right();
+        if (map.inBounds(player.getPosX() + 1, player.getPosY())) {
+            player.right();
+        }
     }
 
     public void exit() {

@@ -3,6 +3,7 @@ package io.github.simonreilich.objects;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
@@ -15,6 +16,7 @@ public class Map implements Drawable {
         map = new TmxMapLoader().load(src);
         renderer = new OrthogonalTiledMapRenderer(map);
     }
+
 
     public TiledMap getMap() {
         return map;
@@ -33,4 +35,20 @@ public class Map implements Drawable {
         map = null;
         renderer = null;
     }
+
+    public boolean inBounds(int x, int y) {
+        if (map == null) return false;
+        TiledMapTileLayer.Cell cell = ((TiledMapTileLayer) map.getLayers().get(0)).getCell(x, y);
+        if (cell != null) {
+            Object result = cell.getTile().getProperties().get("wakable");
+            if (result instanceof Boolean) {
+                return (Boolean) result;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
+
 }

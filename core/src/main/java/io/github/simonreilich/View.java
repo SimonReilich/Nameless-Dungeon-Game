@@ -11,6 +11,7 @@ public class View extends com.badlogic.gdx.Game {
 
     @Override
     public void render() {
+        model.update();
         super.render();
     }
 
