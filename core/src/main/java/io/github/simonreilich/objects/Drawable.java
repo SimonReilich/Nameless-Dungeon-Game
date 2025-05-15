@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 
 public interface Drawable {
 
-    void draw(OrthographicCamera cam, Batch batch);
+    void draw(OrthographicCamera cam, Batch batch, float delta);
 
     void dispose();
 }

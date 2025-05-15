@@ -23,7 +23,7 @@ public class Map implements Drawable {
     }
 
     @Override
-    public void draw(OrthographicCamera cam, Batch batch) {
+    public void draw(OrthographicCamera cam, Batch batch, float delta) {
         renderer.setView(cam);
         renderer.render();
     }

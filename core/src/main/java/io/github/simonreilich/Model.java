@@ -3,8 +3,9 @@ package io.github.simonreilich;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import io.github.simonreilich.objects.Entities.Enemy;
 import io.github.simonreilich.objects.Map;
-import io.github.simonreilich.objects.Player;
+import io.github.simonreilich.objects.Entities.Player;
 import io.github.simonreilich.screens.GameView;
 
 import java.util.Random;
@@ -25,14 +26,17 @@ public class Model {
         this.gameView = new GameView();
         this.view.setScreen(gameView);
         this.isRunning = true;
-        this.player = new Player(new Sprite(new Texture("sprites/player.png")));
+        this.player = new Player(gameView);
         this.map = new Map("maps/testMap.tmx");
+
+        Enemy enemy = new Enemy(15, 11);
 
         player.setPosX((Integer) map.getMap().getLayers().get(0).getProperties().get("spawnX"));
         player.setPosY((Integer) map.getMap().getLayers().get(0).getProperties().get("spawnY"));
 
         gameView.enqueue(map);
         gameView.enqueue(player);
+        gameView.enqueue(enemy);
     }
 
     public void update() {

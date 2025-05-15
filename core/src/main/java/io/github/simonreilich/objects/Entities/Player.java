@@ -1,22 +1,25 @@
-package io.github.simonreilich.objects;
+package io.github.simonreilich.objects.Entities;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import io.github.simonreilich.UpdateType;
+import io.github.simonreilich.objects.Drawable;
+import io.github.simonreilich.screens.DrawQueue;
+import io.github.simonreilich.screens.GameView;
 
-public class Player extends Sprite implements Drawable {
+public class Player extends Entity implements Drawable {
 
+    private GameView gameView;
     private float cooldown;
     private Direction direction;
 
-    public Player(Sprite sprite) {
-        super(sprite);
+    public Player(GameView view) {
+        super(new Sprite(new Texture("sprites/player.png")), 15, 10);
         cooldown = 1;
         direction = Direction.NONE;
-        setPosition(15 * 32 + 4, 10 * 32);
+        this.gameView = view;
     }
 
     public void up() {
@@ -35,9 +38,13 @@ public class Player extends Sprite implements Drawable {
         direction = Direction.RIGHT;
     }
 
+    public void update(UpdateType type, float delta) {
+        return;
+    }
+
     @Override
-    public void draw(OrthographicCamera cam, Batch batch) {
-        update(Gdx.graphics.getDeltaTime());
+    public void draw(OrthographicCamera cam, Batch batch, float delta) {
+        move(delta);
 
         cam.update();
         batch.setProjectionMatrix(cam.combined);
@@ -47,15 +54,11 @@ public class Player extends Sprite implements Drawable {
         batch.end();
     }
 
-    @Override
-    public void dispose() {
-        super.getTexture().dispose();
-    }
-
-    private void update(float delta) {
+    public void move(float delta) {
         if (cooldown < 0) {
             cooldown = Math.min(cooldown + delta, 0);
         } else {
+            boolean moved = true;
             switch (direction) {
                 case UP:
                     setY(getY() + 32);
@@ -75,26 +78,14 @@ public class Player extends Sprite implements Drawable {
                     cooldown = 10.0f;
                     break;
                 case NONE:
+                    moved = false;
                     break;
+            }
+            if (moved) {
+                gameView.updateAll(UpdateType.PlayerMove, delta);
             }
             direction = Direction.NONE;
         }
-    }
-
-    public void setPosX(int x) {
-        setX(x * 32 + 4);
-    }
-
-    public void setPosY(int y) {
-        setY(y * 32);
-    }
-
-    public int getPosX() {
-        return (int) (getX() / 32);
-    }
-
-    public int getPosY() {
-        return (int) (getY() / 32);
     }
 }
 

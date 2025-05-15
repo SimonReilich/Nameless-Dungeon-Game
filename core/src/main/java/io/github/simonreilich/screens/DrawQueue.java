@@ -1,5 +1,6 @@
 package io.github.simonreilich.screens;
 
+import io.github.simonreilich.UpdateType;
 import io.github.simonreilich.objects.Drawable;
 
 public interface DrawQueue {
@@ -11,5 +12,7 @@ public interface DrawQueue {
     public void dequeueAndDisposeAll();
     public void prioritize(Drawable drawable);
     public void deprioritize(Drawable drawable);
+
+    public void updateAll(UpdateType type, float delta);
 
 }

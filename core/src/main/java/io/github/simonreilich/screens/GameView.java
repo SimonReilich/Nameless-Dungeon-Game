@@ -4,16 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import io.github.simonreilich.UpdateType;
 import io.github.simonreilich.objects.Drawable;
-import io.github.simonreilich.objects.Map;
-import io.github.simonreilich.objects.Player;
+import io.github.simonreilich.objects.Entities.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +36,7 @@ public class GameView implements Screen, DrawQueue {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         for (Drawable d : draw) {
-            d.draw(camera, batch);
+            d.draw(camera, batch, delta);
         }
     }
 
@@ -115,5 +110,14 @@ public class GameView implements Screen, DrawQueue {
     public void deprioritize(Drawable drawable) {
         draw.remove(drawable);
         draw.add(0, drawable);
+    }
+
+    @Override
+    public void updateAll(UpdateType type, float delta) {
+        for (Drawable d : draw) {
+            if (d instanceof Entity) {
+                ((Entity) d).update(type, delta);
+            }
+        }
     }
 }
