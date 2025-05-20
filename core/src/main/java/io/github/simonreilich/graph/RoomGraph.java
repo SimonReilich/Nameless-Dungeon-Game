@@ -1,10 +1,5 @@
 package io.github.simonreilich.graph;
 
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
-import io.github.simonreilich.objects.Map;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,15 +11,19 @@ public class RoomGraph {
 
     public RoomGraph() {
         rooms = new ArrayList<>();
-        generateGraph(); // Räume + Verbindungen anlegen
+        //generateGraph(); // Räume + Verbindungen anlegen
+    }
+
+    public void addRoom(RoomNode room) {
+        rooms.add(room);
     }
 
 
      // Erstellt Räume und verbindet sie
     private void generateGraph() {
-        RoomNode a = new RoomNode(new Map("maps/testMap.tmx"));
-        RoomNode b = new RoomNode(new Map("maps/testMap.tmx"));
-        RoomNode c = new RoomNode(new Map("maps/testMap.tmx"));
+        RoomNode a = new RoomNode(new LazyMap("maps/testMap.tmx"));
+        RoomNode b = new RoomNode(new LazyMap("maps/testMap.tmx"));
+        RoomNode c = new RoomNode(new LazyMap("maps/testMap.tmx"));
 
         a.addNeighbor(b); // A → B
         b.addNeighbor(c); // B → C

@@ -1,10 +1,5 @@
 package io.github.simonreilich.graph;
 
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
-import io.github.simonreilich.objects.Map;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,15 +8,22 @@ import java.util.List;
 public class RoomNode {
 
     private List<RoomNode> neighbors;
-    private Map map;
+    public final LazyMap map;
 
-    public RoomNode(Map map) {
+    public RoomNode(LazyMap map) {
         this.neighbors = new ArrayList<>();
         this.map = map;
     }
 
     public void addNeighbor(RoomNode neighbor) {
         neighbors.add(neighbor);
+    }
+
+    public RoomNode getNeighbor(int index) {
+        while (neighbors.size() <= index) {
+            neighbors.add(new RoomNode(new LazyMap()));
+        }
+        return neighbors.get(index);
     }
 
     public List<RoomNode> getNeighbors() {

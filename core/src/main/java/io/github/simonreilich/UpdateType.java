@@ -1,5 +1,5 @@
 package io.github.simonreilich;
 
 public enum UpdateType {
-    PlayerMove
+    PlayerMove, Exit
 }

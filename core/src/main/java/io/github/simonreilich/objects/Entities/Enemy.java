@@ -5,16 +5,14 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import io.github.simonreilich.UpdateType;
 
 public class Enemy extends Entity {
-    private int i = 0;
+    private int i = 1;
 
     public Enemy(int x, int y) {
         super(new Sprite(new Texture("sprites/enemy.png")), x, y);
-        System.out.println("Help, I am at x = " + getX() + ", y = " + getY());
     }
 
     @Override
     public void update(UpdateType type, float delta) {
-        System.out.println("Updating enemy");
         switch (type) {
             case PlayerMove:
                 i = (i + 1) % 4;

@@ -1,41 +1,55 @@
 package io.github.simonreilich.objects.Entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import io.github.simonreilich.UpdateType;
 import io.github.simonreilich.objects.Drawable;
-import io.github.simonreilich.screens.DrawQueue;
-import io.github.simonreilich.screens.GameView;
+import io.github.simonreilich.screens.MapView;
 
 public class Player extends Entity implements Drawable {
 
-    private GameView gameView;
-    private float cooldown;
-    private Direction direction;
+    private MapView mapView;
 
-    public Player(GameView view) {
+    public Player(MapView view) {
         super(new Sprite(new Texture("sprites/player.png")), 15, 10);
-        cooldown = 1;
-        direction = Direction.NONE;
-        this.gameView = view;
+        this.mapView = view;
     }
 
     public void up() {
-        direction = Direction.UP;
-    }
-
-    public void down() {
-        direction = Direction.DOWN;
+        if (mapView.inBounds(getPosX(), getPosY() + 1)) {
+            setY(getY() + 32);
+            mapView.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
+        }
     }
 
     public void left() {
-        direction = Direction.LEFT;
+        if (mapView.inBounds(getPosX() - 1, getPosY())) {
+            setX(getX() - 32);
+            mapView.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
+        }
+    }
+
+    public void down() {
+        if (mapView.inBounds(getPosX(), getPosY() - 1)) {
+            setY(getY() - 32);
+            mapView.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
+        }
     }
 
     public void right() {
-        direction = Direction.RIGHT;
+        if (mapView.inBounds(getPosX() + 1, getPosY())) {
+            setX(getX() + 32);
+            mapView.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
+        }
+    }
+
+    public void interact(Entity entity) {
+        if (entity instanceof Enemy) {
+            mapView.killed();
+        }
     }
 
     public void update(UpdateType type, float delta) {
@@ -44,8 +58,6 @@ public class Player extends Entity implements Drawable {
 
     @Override
     public void draw(OrthographicCamera cam, Batch batch, float delta) {
-        move(delta);
-
         cam.update();
         batch.setProjectionMatrix(cam.combined);
 
@@ -53,42 +65,4 @@ public class Player extends Entity implements Drawable {
         super.draw(batch);
         batch.end();
     }
-
-    public void move(float delta) {
-        if (cooldown < 0) {
-            cooldown = Math.min(cooldown + delta, 0);
-        } else {
-            boolean moved = true;
-            switch (direction) {
-                case UP:
-                    setY(getY() + 32);
-                    cooldown = 10.0f;
-                    break;
-                case DOWN:
-                    setY(getY() - 32);
-                    cooldown = 10.0f;
-                    break;
-                case LEFT:
-                    setX(getX() - 32);
-                    cooldown = 10.0f;
-                    System.out.println("Hi");
-                    break;
-                case RIGHT:
-                    setX(getX() + 32);
-                    cooldown = 10.0f;
-                    break;
-                case NONE:
-                    moved = false;
-                    break;
-            }
-            if (moved) {
-                gameView.updateAll(UpdateType.PlayerMove, delta);
-            }
-            direction = Direction.NONE;
-        }
-    }
-}
-
-enum Direction {
-    UP, DOWN, LEFT, RIGHT, NONE
 }

@@ -31,7 +31,6 @@ public class Controller extends InputAdapter {
                 model.exit();
                 break;
         }
-        model.update();
         return super.keyDown(keycode);
     }
 
