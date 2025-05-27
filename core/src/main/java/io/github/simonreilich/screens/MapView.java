@@ -22,7 +22,9 @@ import io.github.simonreilich.objects.Entities.Entity;
 import io.github.simonreilich.objects.Entities.Player;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MapView implements Screen, DrawQueue {
 
@@ -35,6 +37,8 @@ public class MapView implements Screen, DrawQueue {
     private RoomGraph roomGraph;
     private RoomNode map;
     private OrthogonalTiledMapRenderer renderer;
+
+    private boolean killed = false;
 
     public void setModel(Model model) {
         this.model = model;
@@ -53,7 +57,7 @@ public class MapView implements Screen, DrawQueue {
         this.player = new Player(this);
 
         roomGraph = new RoomGraph();
-        LazyMap lazyMap = new LazyMap("maps/testMap.tmx");
+        LazyMap lazyMap = new LazyMap();
         renderer = new OrthogonalTiledMapRenderer(lazyMap.getMap());
         map = new RoomNode(lazyMap);
         roomGraph.addRoom(map);
@@ -77,6 +81,10 @@ public class MapView implements Screen, DrawQueue {
 
         for (Drawable d : draw) {
             d.draw(camera, batch, delta);
+        }
+
+        if (killed) {
+            model.killed();
         }
     }
 
@@ -117,6 +125,16 @@ public class MapView implements Screen, DrawQueue {
             return cell.getTile().getProperties();
         }
         return new MapProperties();
+    }
+
+    public Set<Entity> getEntities(int x, int y) {
+        Set<Entity> entities = new HashSet<>();
+        for (Drawable d : draw) {
+            if (d instanceof Entity && ((Entity) d).getPosX() == x && ((Entity) d).getPosY() == y) {
+                entities.add((Entity) d);
+            }
+        }
+        return entities;
     }
 
     public boolean inBounds(int x, int y) {
@@ -187,14 +205,11 @@ public class MapView implements Screen, DrawQueue {
         for (Drawable d : draw) {
             if (d instanceof Entity) {
                 ((Entity) d).update(type, delta);
-                if (! (d instanceof Player) && ((Entity) d).getPosX() == player.getPosX() && ((Entity) d).getPosY() == player.getPosY()) {
-                    player.interact((Entity) d);
-                }
             }
         }
     }
 
     public void killed() {
-        model.killed();
+        killed = true;
     }
 }

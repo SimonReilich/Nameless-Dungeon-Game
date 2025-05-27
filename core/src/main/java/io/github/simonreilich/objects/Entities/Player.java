@@ -22,6 +22,9 @@ public class Player extends Entity implements Drawable {
         if (mapView.inBounds(getPosX(), getPosY() + 1)) {
             setY(getY() + 32);
             mapView.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
+            for (Entity entity : mapView.getEntities(getPosX(), getPosY())) {
+                this.interact(entity);
+            }
         }
     }
 
@@ -29,6 +32,9 @@ public class Player extends Entity implements Drawable {
         if (mapView.inBounds(getPosX() - 1, getPosY())) {
             setX(getX() - 32);
             mapView.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
+            for (Entity entity : mapView.getEntities(getPosX(), getPosY())) {
+                this.interact(entity);
+            }
         }
     }
 
@@ -36,6 +42,9 @@ public class Player extends Entity implements Drawable {
         if (mapView.inBounds(getPosX(), getPosY() - 1)) {
             setY(getY() - 32);
             mapView.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
+            for (Entity entity : mapView.getEntities(getPosX(), getPosY())) {
+                this.interact(entity);
+            }
         }
     }
 
@@ -43,6 +52,9 @@ public class Player extends Entity implements Drawable {
         if (mapView.inBounds(getPosX() + 1, getPosY())) {
             setX(getX() + 32);
             mapView.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
+            for (Entity entity : mapView.getEntities(getPosX(), getPosY())) {
+                this.interact(entity);
+            }
         }
     }
 

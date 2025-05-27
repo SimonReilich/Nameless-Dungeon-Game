@@ -45,8 +45,14 @@ public class Model {
     }
 
     public void killed() {
-        this.view.setScreen(endView);
-        mapView.dispose();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } finally {
+            this.view.setScreen(endView);
+            mapView.dispose();
+        }
     }
 
     public void exit() {
