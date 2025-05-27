@@ -12,54 +12,45 @@ import io.github.simonreilich.screens.MapView;
 public class Player extends Entity implements Drawable {
 
     private MapView mapView;
+    private boolean alive;
 
     public Player(MapView view) {
         super(new Sprite(new Texture("sprites/player.png")), 15, 10);
         this.mapView = view;
+        this.alive = true;
     }
 
     public void up() {
-        if (mapView.inBounds(getPosX(), getPosY() + 1)) {
+        if (mapView.inBounds(getPosX(), getPosY() + 1) && alive) {
             setY(getY() + 32);
             mapView.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
-            for (Entity entity : mapView.getEntities(getPosX(), getPosY())) {
-                this.interact(entity);
-            }
         }
     }
 
     public void left() {
-        if (mapView.inBounds(getPosX() - 1, getPosY())) {
+        if (mapView.inBounds(getPosX() - 1, getPosY()) && alive) {
             setX(getX() - 32);
             mapView.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
-            for (Entity entity : mapView.getEntities(getPosX(), getPosY())) {
-                this.interact(entity);
-            }
         }
     }
 
     public void down() {
-        if (mapView.inBounds(getPosX(), getPosY() - 1)) {
+        if (mapView.inBounds(getPosX(), getPosY() - 1) && alive) {
             setY(getY() - 32);
             mapView.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
-            for (Entity entity : mapView.getEntities(getPosX(), getPosY())) {
-                this.interact(entity);
-            }
         }
     }
 
     public void right() {
-        if (mapView.inBounds(getPosX() + 1, getPosY())) {
+        if (mapView.inBounds(getPosX() + 1, getPosY()) && alive) {
             setX(getX() + 32);
             mapView.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
-            for (Entity entity : mapView.getEntities(getPosX(), getPosY())) {
-                this.interact(entity);
-            }
         }
     }
 
     public void interact(Entity entity) {
-        if (entity instanceof Enemy) {
+        if (entity instanceof Enemy && alive) {
+            alive = false;
             mapView.killed();
         }
     }

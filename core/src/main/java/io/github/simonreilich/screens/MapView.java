@@ -6,11 +6,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.MapProperties;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import io.github.simonreilich.Controller;
 import io.github.simonreilich.Model;
 import io.github.simonreilich.UpdateType;
 import io.github.simonreilich.graph.LazyMap;
@@ -21,10 +18,7 @@ import io.github.simonreilich.objects.Entities.Enemy;
 import io.github.simonreilich.objects.Entities.Entity;
 import io.github.simonreilich.objects.Entities.Player;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class MapView implements Screen, DrawQueue {
 
@@ -35,10 +29,8 @@ public class MapView implements Screen, DrawQueue {
     public Player player;
 
     private RoomGraph roomGraph;
-    private RoomNode map;
+    private RoomNode mapNode;
     private OrthogonalTiledMapRenderer renderer;
-
-    private boolean killed = false;
 
     public void setModel(Model model) {
         this.model = model;
@@ -59,20 +51,26 @@ public class MapView implements Screen, DrawQueue {
         roomGraph = new RoomGraph();
         LazyMap lazyMap = new LazyMap();
         renderer = new OrthogonalTiledMapRenderer(lazyMap.getMap());
-        map = new RoomNode(lazyMap);
-        roomGraph.addRoom(map);
+        mapNode = new RoomNode(lazyMap);
+        roomGraph.addRoom(mapNode);
 
-        Enemy enemy = new Enemy(16, 11);
+        player.setPosX((Integer) mapNode.map.getLayers().get(0).getProperties().get("spawnX"));
+        player.setPosY((Integer) mapNode.map.getLayers().get(0).getProperties().get("spawnY"));
 
-        player.setPosX((Integer) map.map.getLayers().get(0).getProperties().get("spawnX"));
-        player.setPosY((Integer) map.map.getLayers().get(0).getProperties().get("spawnY"));
-
-        this.enqueue(enemy);
+        for (int x = 0; x < 30; x++) {
+            for (int y = 0; y < 20; y++) {
+                if (mapNode.map.getMapProperties(x, y).containsKey("spawn")) {
+                    this.enqueue(new Enemy(x, y));
+                }
+            }
+        }
         this.enqueue(player);
     }
 
     @Override
     public void render(float delta) {
+        if (renderer == null) return;
+
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -81,10 +79,6 @@ public class MapView implements Screen, DrawQueue {
 
         for (Drawable d : draw) {
             d.draw(camera, batch, delta);
-        }
-
-        if (killed) {
-            model.killed();
         }
     }
 
@@ -113,18 +107,10 @@ public class MapView implements Screen, DrawQueue {
     @Override
     public void dispose() {
         batch.dispose();
-        map.map.dispose();
+        mapNode.map.dispose();
         renderer.dispose();
-        map = null;
+        mapNode = null;
         renderer = null;
-    }
-
-    public MapProperties getMapProperties(int x, int y) {
-        TiledMapTileLayer.Cell cell = ((TiledMapTileLayer) map.map.getLayers().get(0)).getCell(x, y);
-        if (cell != null) {
-            return cell.getTile().getProperties();
-        }
-        return new MapProperties();
     }
 
     public Set<Entity> getEntities(int x, int y) {
@@ -138,8 +124,8 @@ public class MapView implements Screen, DrawQueue {
     }
 
     public boolean inBounds(int x, int y) {
-        if (map == null) return false;
-        Object result = getMapProperties(x, y).get("wakable");
+        if (mapNode == null) return false;
+        Object result = mapNode.map.getMapProperties(x, y).get("wakable");
         if (result instanceof Boolean) {
             return (Boolean) result;
         } else {
@@ -193,23 +179,30 @@ public class MapView implements Screen, DrawQueue {
 
         switch (type) {
             case PlayerMove:
-                Object newMap = getMapProperties(player.getPosX(), player.getPosY()).get("map");
+                // if the player steps on a door, the map changes
+                Object newMap = mapNode.map.getMapProperties(player.getPosX(), player.getPosY()).get("map");
                 if (newMap instanceof Integer) {
-                    map = map.getNeighbor((Integer) newMap);
-                    map.map.init();
-                    player.setPosX((Integer) map.map.getLayers().get(0).getProperties().get("spawnX"));
-                    player.setPosY((Integer) map.map.getLayers().get(0).getProperties().get("spawnY"));
+                    mapNode = mapNode.getNeighbor((Integer) newMap);
+                    mapNode.map.init();
+                    player.setPosX((Integer) mapNode.map.getLayers().get(0).getProperties().get("spawnX"));
+                    player.setPosY((Integer) mapNode.map.getLayers().get(0).getProperties().get("spawnY"));
                 }
         }
 
+        // every entity gets updated
         for (Drawable d : draw) {
             if (d instanceof Entity) {
                 ((Entity) d).update(type, delta);
             }
         }
+
+        // Player interacts with all entities, that are on the same position
+        for (Entity entity : getEntities(player.getPosX(), player.getPosY())) {
+            player.interact(entity);
+        }
     }
 
     public void killed() {
-        killed = true;
+        this.dequeue(player);
     }
 }

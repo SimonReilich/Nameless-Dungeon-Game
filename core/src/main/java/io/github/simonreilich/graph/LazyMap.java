@@ -1,7 +1,9 @@
 package io.github.simonreilich.graph;
 
 import com.badlogic.gdx.maps.MapLayers;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
 import java.io.BufferedReader;
@@ -25,21 +27,29 @@ public class LazyMap {
     }
 
     public void init() {
-        map = new TmxMapLoader().load(source);
+        if (map == null) {
+            map = new TmxMapLoader().load(source);
+        }
     }
 
     public TiledMap getMap() {
-        if (map == null) {
-            this.init();
-        }
+        init();
         return map;
     }
 
     public MapLayers getLayers() {
-        if (map == null) {
-            this.init();
-        }
+        init();
         return map.getLayers();
+    }
+
+    public MapProperties getMapProperties(int x, int y) {
+        init();
+
+        TiledMapTileLayer.Cell cell = ((TiledMapTileLayer) map.getLayers().get(0)).getCell(x, y);
+        if (cell != null) {
+            return cell.getTile().getProperties();
+        }
+        return new MapProperties();
     }
 
     public void dispose() {

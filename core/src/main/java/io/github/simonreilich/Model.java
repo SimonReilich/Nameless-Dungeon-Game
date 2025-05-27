@@ -3,11 +3,13 @@ package io.github.simonreilich;
 import com.badlogic.gdx.Gdx;
 import io.github.simonreilich.screens.EndView;
 import io.github.simonreilich.screens.MapView;
+import io.github.simonreilich.screens.StartView;
 
 public class Model {
 
     private final View view;
     private final Controller controller;
+    private final StartView startView;
     private final MapView mapView;
     private final EndView endView;
 
@@ -15,16 +17,17 @@ public class Model {
         this.view = view;
         this.controller = new Controller(this);
         Gdx.input.setInputProcessor(controller);
+        this.startView = new StartView();
         this.mapView = new MapView();
         this.endView = new EndView();
         this.mapView.setModel(this);
-        this.view.setScreen(mapView);
+        this.view.setScreen(startView);
     }
 
     public void update(UpdateType type) {
         switch (type) {
             case Exit:
-                exit();
+                nextView();
         }
     }
 
@@ -55,13 +58,18 @@ public class Model {
         }
     }
 
-    public void exit() {
-        if (!(this.view.getScreen() == endView)) {
+    public void nextView() {
+        if (this.view.getScreen() == startView) {
+            this.view.setScreen(mapView);
+        } else if (this.view.getScreen() == mapView) {
+            this.view.setScreen(endView);
+        } else {
+            startView.dispose();
             mapView.dispose();
+            endView.dispose();
+            view.dispose();
+            Gdx.app.exit();
         }
-        endView.dispose();
-        view.dispose();
-        Gdx.app.exit();
     }
 
 }

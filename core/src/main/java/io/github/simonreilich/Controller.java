@@ -28,7 +28,7 @@ public class Controller extends InputAdapter {
                 model.right();
                 break;
             case Input.Keys.ESCAPE:
-                model.exit();
+                model.nextView();
                 break;
         }
         return super.keyDown(keycode);

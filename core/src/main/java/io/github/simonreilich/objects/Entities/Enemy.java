@@ -8,7 +8,15 @@ public class Enemy extends Entity {
     private int i = 1;
 
     public Enemy(int x, int y) {
-        super(new Sprite(new Texture("sprites/enemy.png")), x, y);
+        super(new Sprite(new Texture(randomTexture())), x, y);
+    }
+
+    private static String randomTexture() {
+        if (Math.random() < 0.7) {
+            return "sprites/blob/01.png";
+        } else {
+            return "sprites/blob/02.png";
+        }
     }
 
     @Override
