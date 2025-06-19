@@ -113,10 +113,20 @@ public class MapView implements Screen, DrawQueue {
         renderer = null;
     }
 
-    public Set<Entity> getEntities(int x, int y) {
+    public Set<Entity> getEntitiesPos(int x, int y) {
         Set<Entity> entities = new HashSet<>();
         for (Drawable d : draw) {
             if (d instanceof Entity && ((Entity) d).getPosX() == x && ((Entity) d).getPosY() == y) {
+                entities.add((Entity) d);
+            }
+        }
+        return entities;
+    }
+
+    public Set<Entity> getEntitiesDest(int x, int y) {
+        Set<Entity> entities = new HashSet<>();
+        for (Drawable d : draw) {
+            if (d instanceof Entity && ((Entity) d).getDestinationX() == x && ((Entity) d).getDestinationY() == y) {
                 entities.add((Entity) d);
             }
         }
@@ -197,7 +207,11 @@ public class MapView implements Screen, DrawQueue {
         }
 
         // Player interacts with all entities, that are on the same position
-        for (Entity entity : getEntities(player.getPosX(), player.getPosY())) {
+        for (Entity entity : getEntitiesPos(player.getDestinationX(), player.getDestinationY())) {
+            player.interact(entity);
+        }
+        // Player interacts with all entities, that go to his spot
+        for (Entity entity : getEntitiesDest(player.getDestinationX(), player.getDestinationY())) {
             player.interact(entity);
         }
     }

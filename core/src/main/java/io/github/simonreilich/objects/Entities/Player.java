@@ -21,29 +21,29 @@ public class Player extends Entity implements Drawable {
     }
 
     public void up() {
-        if (mapView.inBounds(getPosX(), getPosY() + 1) && alive) {
-            setY(getY() + 32);
+        if (mapView.inBounds(getPosX(), getPosY() + 1) && destinationX == getX() && destinationY == getY() && alive) {
+            super.up();
             mapView.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
         }
     }
 
     public void left() {
-        if (mapView.inBounds(getPosX() - 1, getPosY()) && alive) {
-            setX(getX() - 32);
+        if (mapView.inBounds(getPosX() - 1, getPosY()) && destinationX == getX() && destinationY == getY()  && alive) {
+            super.left();
             mapView.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
         }
     }
 
     public void down() {
-        if (mapView.inBounds(getPosX(), getPosY() - 1) && alive) {
-            setY(getY() - 32);
+        if (mapView.inBounds(getPosX(), getPosY() - 1) && destinationX == getX() && destinationY == getY() && alive) {
+            super.down();
             mapView.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
         }
     }
 
     public void right() {
-        if (mapView.inBounds(getPosX() + 1, getPosY()) && alive) {
-            setX(getX() + 32);
+        if (mapView.inBounds(getPosX() + 1, getPosY()) && destinationX == getX() && destinationY == getY() && alive) {
+            super.right();
             mapView.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
         }
     }
@@ -57,15 +57,5 @@ public class Player extends Entity implements Drawable {
 
     public void update(UpdateType type, float delta) {
         return;
-    }
-
-    @Override
-    public void draw(OrthographicCamera cam, Batch batch, float delta) {
-        cam.update();
-        batch.setProjectionMatrix(cam.combined);
-
-        batch.begin();
-        super.draw(batch);
-        batch.end();
     }
 }

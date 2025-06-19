@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import io.github.simonreilich.UpdateType;
 
 public class Enemy extends Entity {
-    private int i = 1;
+    private int i = -1;
 
     public Enemy(int x, int y) {
         super(new Sprite(new Texture(randomTexture())), x, y);
@@ -25,13 +25,13 @@ public class Enemy extends Entity {
             case PlayerMove:
                 i = (i + 1) % 4;
                 if (i == 0) {
-                    setPosX(getPosX() + 1);
+                    left();
                 } else if (i == 1) {
-                    setPosY(getPosY() + 1);
+                    down();
                 } else if (i == 2) {
-                    setPosX(getPosX() - 1);
+                    right();
                 } else if (i == 3) {
-                    setPosY(getPosY() - 1);
+                    up();
                 }
         }
     }
