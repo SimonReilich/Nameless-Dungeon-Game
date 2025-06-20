@@ -1,6 +1,7 @@
 package io.github.simonreilich.objects.Entities;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import io.github.simonreilich.UpdateType;
@@ -14,12 +15,16 @@ public abstract class Entity extends Sprite implements Drawable {
     protected float startX;
     protected float startY;
 
+    private Sprite shadow;
+
     private final float JUMP = 0.5f;
 
     public Entity(Sprite sprite, int x, int y) {
         super(sprite);
         setPosX(x);
         setPosY(y);
+
+        shadow = new Sprite(new Texture("sprites/shadow.png"));
     }
 
     public void setPosX(int x) {
@@ -50,24 +55,24 @@ public abstract class Entity extends Sprite implements Drawable {
         return (int) (destinationY / 32);
     }
 
-    public void left() {
+    public void left(int d) {
         startX = getX();
-        destinationX -= 32;
+        destinationX -= 32 * d;
     }
 
-    public void right() {
+    public void right(int d) {
         startX = getX();
-        destinationX += 32;
+        destinationX += 32 * d;
     }
 
-    public void up() {
+    public void up(int d) {
         startY = getY();
-        destinationY += 32;
+        destinationY += 32 * d;
     }
 
-    public void down() {
+    public void down(int d) {
         startY = getY();
-        destinationY -= 32;
+        destinationY -= 32 * d;
     }
 
     @Override
@@ -109,6 +114,10 @@ public abstract class Entity extends Sprite implements Drawable {
 
         float yTemp = getY();
         setY(yTemp + (offset * 8.0f));
+
+        batch.begin();
+        batch.draw(shadow, getX(), yTemp + (getHeight() * 0.075f), getWidth(), (getHeight() * 0.25f));
+        batch.end();
 
         batch.begin();
         super.draw(batch);

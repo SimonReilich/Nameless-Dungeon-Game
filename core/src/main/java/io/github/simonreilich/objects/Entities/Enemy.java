@@ -25,13 +25,13 @@ public class Enemy extends Entity {
             case PlayerMove:
                 i = (i + 1) % 4;
                 if (i == 0) {
-                    left();
+                    left(1);
                 } else if (i == 1) {
-                    down();
+                    down(1);
                 } else if (i == 2) {
-                    right();
+                    right(1);
                 } else if (i == 3) {
-                    up();
+                    up(1);
                 }
         }
     }

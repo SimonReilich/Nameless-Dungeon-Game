@@ -22,28 +22,28 @@ public class Player extends Entity implements Drawable {
 
     public void up() {
         if (mapView.inBounds(getPosX(), getPosY() + 1) && destinationX == getX() && destinationY == getY() && alive) {
-            super.up();
+            super.up(1);
             mapView.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
         }
     }
 
     public void left() {
         if (mapView.inBounds(getPosX() - 1, getPosY()) && destinationX == getX() && destinationY == getY()  && alive) {
-            super.left();
+            super.left(1);
             mapView.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
         }
     }
 
     public void down() {
         if (mapView.inBounds(getPosX(), getPosY() - 1) && destinationX == getX() && destinationY == getY() && alive) {
-            super.down();
+            super.down(1);
             mapView.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
         }
     }
 
     public void right() {
         if (mapView.inBounds(getPosX() + 1, getPosY()) && destinationX == getX() && destinationY == getY() && alive) {
-            super.right();
+            super.right(1);
             mapView.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
         }
     }
