@@ -11,6 +11,9 @@ public abstract class Entity extends Sprite implements Drawable {
     protected float destinationX;
     protected float destinationY;
 
+    protected float startX;
+    protected float startY;
+
     private final float JUMP = 0.5f;
 
     public Entity(Sprite sprite, int x, int y) {
@@ -22,11 +25,13 @@ public abstract class Entity extends Sprite implements Drawable {
     public void setPosX(int x) {
         setX(x * 32 + ((32 - this.getWidth()) / 2));
         destinationX = getX();
+        startX = getX();
     }
 
     public void setPosY(int y) {
         setY(y * 32);
         destinationY = getY();
+        startY = getY();
     }
 
     public int getPosX() {
@@ -46,18 +51,22 @@ public abstract class Entity extends Sprite implements Drawable {
     }
 
     public void left() {
+        startX = getX();
         destinationX -= 32;
     }
 
     public void right() {
+        startX = getX();
         destinationX += 32;
     }
 
     public void up() {
+        startY = getY();
         destinationY += 32;
     }
 
     public void down() {
+        startY = getY();
         destinationY -= 32;
     }
 
@@ -66,9 +75,30 @@ public abstract class Entity extends Sprite implements Drawable {
         cam.update();
         batch.setProjectionMatrix(cam.combined);
 
+        float offset = 0.0f;
+
         if (destinationX != getX() || destinationY != getY()) {
-            setX(getX() - (getX() - destinationX) / 4);
-            setY(getY() - (getY() - destinationY) / 4);
+            float progressX = 1.0f - (getX() - destinationX) / (startX - destinationX);
+            float progressY = 1.0f - (getY() - destinationY) / (startY - destinationY);
+
+            if (progressX != 1.0f) {
+                offset = (float) (1.0 - Math.pow(2.0 * (progressX - 0.5), 2));
+            } else if (progressY != 1.0f) {
+                offset = (float) (1.0 - Math.pow(2.0 * (progressY - 0.5), 2));
+            }
+
+            if (getX() < destinationX) {
+                setX(getX() + (offset * 20.0f + 2.0f) / 4);
+            } else if (getX() > destinationX) {
+                setX(getX() - (offset * 20.0f + 2.0f) / 4);
+            }
+
+            if (getY() < destinationY) {
+                setY(getY() + (offset * 20.0f + 2.0f) / 4);
+            }  else if (getY() > destinationY) {
+                setY(getY() - (offset * 20.0f + 2.0f) / 4);
+            }
+
             if (Math.abs(destinationX - getX()) < JUMP) {
                 setX(destinationX);
             }
@@ -77,9 +107,14 @@ public abstract class Entity extends Sprite implements Drawable {
             }
         }
 
+        float yTemp = getY();
+        setY(yTemp + (offset * 8.0f));
+
         batch.begin();
         super.draw(batch);
         batch.end();
+
+        setY(yTemp);
     }
 
     public abstract void update(UpdateType type, float delta);
