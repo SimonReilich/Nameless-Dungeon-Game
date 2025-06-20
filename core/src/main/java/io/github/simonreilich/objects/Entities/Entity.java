@@ -15,16 +15,23 @@ public abstract class Entity extends Sprite implements Drawable {
     protected float startX;
     protected float startY;
 
-    private Sprite shadow;
+    private final Texture shadow;
 
-    private final float JUMP = 0.5f;
+    private final float SKIP_ANIMATION_DISTANCE = 0.5f;
+    private float MAX_SPEED;
+    private float START_SPEED;
+    private float JUMP_HEIGHT;
 
     public Entity(Sprite sprite, int x, int y) {
         super(sprite);
         setPosX(x);
         setPosY(y);
 
-        shadow = new Sprite(new Texture("sprites/shadow.png"));
+        MAX_SPEED = 7.0f;
+        START_SPEED = 0.2f;
+        JUMP_HEIGHT = 8.0f;
+
+        shadow = new Texture("sprites/shadow.png");
     }
 
     public void setPosX(int x) {
@@ -93,27 +100,27 @@ public abstract class Entity extends Sprite implements Drawable {
             }
 
             if (getX() < destinationX) {
-                setX(getX() + (offset * 20.0f + 2.0f) / 4);
+                setX(getX() + (offset * MAX_SPEED + START_SPEED));
             } else if (getX() > destinationX) {
-                setX(getX() - (offset * 20.0f + 2.0f) / 4);
+                setX(getX() - (offset * MAX_SPEED + START_SPEED));
             }
 
             if (getY() < destinationY) {
-                setY(getY() + (offset * 20.0f + 2.0f) / 4);
+                setY(getY() + (offset * MAX_SPEED + START_SPEED));
             }  else if (getY() > destinationY) {
-                setY(getY() - (offset * 20.0f + 2.0f) / 4);
+                setY(getY() - (offset * MAX_SPEED + START_SPEED));
             }
 
-            if (Math.abs(destinationX - getX()) < JUMP) {
+            if (Math.abs(destinationX - getX()) < SKIP_ANIMATION_DISTANCE) {
                 setX(destinationX);
             }
-            if (Math.abs(destinationY - getY()) < JUMP) {
+            if (Math.abs(destinationY - getY()) < SKIP_ANIMATION_DISTANCE) {
                 setY(destinationY);
             }
         }
 
         float yTemp = getY();
-        setY(yTemp + (offset * 8.0f));
+        setY(yTemp + (offset * JUMP_HEIGHT));
 
         batch.begin();
         batch.draw(shadow, getX(), yTemp + (getHeight() * 0.075f), getWidth(), (getHeight() * 0.25f));
@@ -131,5 +138,6 @@ public abstract class Entity extends Sprite implements Drawable {
     @Override
     public void dispose() {
         this.getTexture().dispose();
+        shadow.dispose();
     }
 }
