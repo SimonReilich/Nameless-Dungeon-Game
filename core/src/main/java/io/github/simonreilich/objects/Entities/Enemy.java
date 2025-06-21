@@ -1,21 +1,21 @@
 package io.github.simonreilich.objects.Entities;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import io.github.simonreilich.UpdateType;
+import io.github.simonreilich.objects.Entities.enemies.Blob;
+import io.github.simonreilich.objects.Entities.enemies.SlowBlob;
 
-public class Enemy extends Entity {
-    private int i = -1;
+public abstract class Enemy extends Entity {
 
-    public Enemy(int x, int y) {
-        super(new Sprite(new Texture(randomTexture())), x, y);
+    public Enemy(Sprite sprite, int x, int y) {
+        super(sprite, x, y);
     }
 
-    private static String randomTexture() {
-        if (Math.random() < 0.7) {
-            return "sprites/blob/01.png";
+    public static Enemy spawn(int spawnID, int x, int y) {
+        if (Math.random() < 0.5) {
+            return new Blob(x, y);
         } else {
-            return "sprites/blob/02.png";
+            return new SlowBlob(x, y);
         }
     }
 
@@ -23,16 +23,15 @@ public class Enemy extends Entity {
     public void update(UpdateType type, float delta) {
         switch (type) {
             case PlayerMove:
-                i = (i + 1) % 4;
-                if (i == 0) {
-                    left(1);
-                } else if (i == 1) {
-                    down(1);
-                } else if (i == 2) {
-                    right(1);
-                } else if (i == 3) {
-                    up(1);
-                }
+                move();
+            case PlayerAttack:
+                harm();
         }
     }
+
+    public abstract void move();
+
+    public abstract void harm();
+
+    public abstract void attack();
 }

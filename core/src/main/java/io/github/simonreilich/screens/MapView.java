@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import io.github.simonreilich.Controller;
 import io.github.simonreilich.Model;
 import io.github.simonreilich.UpdateType;
 import io.github.simonreilich.graph.LazyMap;
@@ -60,7 +59,7 @@ public class MapView implements Screen, DrawQueue {
         for (int x = 0; x < 30; x++) {
             for (int y = 0; y < 20; y++) {
                 if (mapNode.map.getMapProperties(x, y).containsKey("spawn")) {
-                    this.enqueue(new Enemy(x, y));
+                    this.enqueue(Enemy.spawn(mapNode.map.getMapProperties(x, y).get("spawn", Integer.class), x, y));
                 }
             }
         }
@@ -123,10 +122,16 @@ public class MapView implements Screen, DrawQueue {
         return entities;
     }
 
-    public Set<Entity> getEntitiesDest(int x, int y) {
+    public Set<Entity> getEntitiesAdj(int x, int y) {
         Set<Entity> entities = new HashSet<>();
         for (Drawable d : draw) {
-            if (d instanceof Entity && ((Entity) d).getDestinationX() == x && ((Entity) d).getDestinationY() == y) {
+            if (d instanceof Entity && ((Entity) d).getDestinationX() == x - 1 && ((Entity) d).getDestinationY() == y) {
+                entities.add((Entity) d);
+            } else if (d instanceof Entity && ((Entity) d).getDestinationX() == x + 1 && ((Entity) d).getDestinationY() == y) {
+                entities.add((Entity) d);
+            } else if (d instanceof Entity && ((Entity) d).getDestinationX() == x && ((Entity) d).getDestinationY() == y - 1) {
+                entities.add((Entity) d);
+            } else if (d instanceof Entity && ((Entity) d).getDestinationX() == x && ((Entity) d).getDestinationY() == y + 1) {
                 entities.add((Entity) d);
             }
         }
@@ -141,6 +146,10 @@ public class MapView implements Screen, DrawQueue {
         } else {
             return false;
         }
+    }
+
+    public boolean occupied(int x, int y) {
+        return draw.stream().anyMatch(d -> d instanceof Entity && ((Entity) d).getPosX() == x && ((Entity) d).getPosY() == y);
     }
 
     @Override
@@ -206,12 +215,8 @@ public class MapView implements Screen, DrawQueue {
             }
         }
 
-        // Player interacts with all entities, that are on the same position
-        for (Entity entity : getEntitiesPos(player.getDestinationX(), player.getDestinationY())) {
-            player.interact(entity);
-        }
-        // Player interacts with all entities, that go to his spot
-        for (Entity entity : getEntitiesDest(player.getDestinationX(), player.getDestinationY())) {
+        // Player interacts with all Entities, that are adjacent to him
+        for (Entity entity : getEntitiesAdj(player.getDestinationX(), player.getDestinationY())) {
             player.interact(entity);
         }
     }

@@ -1,9 +1,7 @@
 package io.github.simonreilich.objects.Entities;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import io.github.simonreilich.UpdateType;
 import io.github.simonreilich.objects.Drawable;
@@ -21,28 +19,28 @@ public class Player extends Entity implements Drawable {
     }
 
     public void up() {
-        if (mapView.inBounds(getPosX(), getPosY() + 1) && destinationX == getX() && destinationY == getY() && alive) {
+        if (mapView.inBounds(getPosX(), getPosY() + 1) && !mapView.occupied(getPosX(), getPosY() + 1) && destinationX == getX() && destinationY == getY() && alive) {
             super.up(1);
             mapView.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
         }
     }
 
     public void left() {
-        if (mapView.inBounds(getPosX() - 1, getPosY()) && destinationX == getX() && destinationY == getY()  && alive) {
+        if (mapView.inBounds(getPosX() - 1, getPosY()) && !mapView.occupied(getPosX() - 1, getPosY()) && destinationX == getX() && destinationY == getY()  && alive) {
             super.left(1);
             mapView.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
         }
     }
 
     public void down() {
-        if (mapView.inBounds(getPosX(), getPosY() - 1) && destinationX == getX() && destinationY == getY() && alive) {
+        if (mapView.inBounds(getPosX(), getPosY() - 1) && !mapView.occupied(getPosX(), getPosY() - 1) && destinationX == getX() && destinationY == getY() && alive) {
             super.down(1);
             mapView.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
         }
     }
 
     public void right() {
-        if (mapView.inBounds(getPosX() + 1, getPosY()) && destinationX == getX() && destinationY == getY() && alive) {
+        if (mapView.inBounds(getPosX() + 1, getPosY()) && !mapView.occupied(getPosX() + 1, getPosY()) && destinationX == getX() && destinationY == getY() && alive) {
             super.right(1);
             mapView.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
         }
