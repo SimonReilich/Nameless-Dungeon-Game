@@ -51,7 +51,8 @@ public class Player extends Entity implements Drawable {
     public void interact(Entity entity) {
         if (entity instanceof Enemy && alive) {
             alive = false;
-            mapView.killed();
+            this.getTexture().dispose();
+            this.setTexture(new Texture("sprites/player_dead.png"));
         }
     }
 

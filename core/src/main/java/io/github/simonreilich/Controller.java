@@ -6,14 +6,40 @@ import com.badlogic.gdx.InputAdapter;
 public class Controller extends InputAdapter {
 
     private Model model;
+    private Screen screen;
 
     public Controller(Model model) {
         super();
         this.model = model;
+        this.screen = Screen.Start;
     }
 
     @Override
     public boolean keyDown(int keycode) {
+        switch (screen) {
+            case Start:
+                return start(keycode);
+            case Map:
+                return map(keycode);
+            case Menu:
+                return menu(keycode);
+            case End:
+                return end(keycode);
+        }
+        return super.keyDown(keycode);
+    }
+
+    private boolean start(int keycode) {
+        switch (keycode) {
+            case Input.Keys.SPACE:
+                model.nextView();
+                screen = Screen.Map;
+                break;
+        }
+        return super.keyDown(keycode);
+    }
+
+    private boolean map(int keycode) {
         switch (keycode) {
             case Input.Keys.W:
                 model.up();
@@ -29,24 +55,30 @@ public class Controller extends InputAdapter {
                 break;
             case Input.Keys.ESCAPE:
                 model.nextView();
+                screen = Screen.End;
                 break;
         }
         return super.keyDown(keycode);
     }
 
-    @Override
-    public boolean keyUp(int keycode) {
+    private boolean menu(int keycode) {
         switch (keycode) {
-            case Input.Keys.W:
-                //
-            case Input.Keys.A:
-                //
-            case Input.Keys.S:
-                //
-            case Input.Keys.D:
-                //
+
         }
         return super.keyDown(keycode);
     }
 
+    private boolean end(int keycode) {
+        switch (keycode) {
+            case Input.Keys.ESCAPE:
+                model.nextView();
+                break;
+        }
+        return super.keyDown(keycode);
+    }
+
+}
+
+enum Screen {
+    Start, Map, Menu, End
 }

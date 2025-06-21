@@ -215,8 +215,4 @@ public class MapView implements Screen, DrawQueue {
             player.interact(entity);
         }
     }
-
-    public void killed() {
-        this.dequeue(player);
-    }
 }
