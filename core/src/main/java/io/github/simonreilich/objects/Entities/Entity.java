@@ -18,6 +18,7 @@ public abstract class Entity extends Sprite implements Drawable {
     private final Texture shadow;
 
     private final float SKIP_ANIMATION_DISTANCE = 0.5f;
+    private final float NO_ORIGIN = 1.0f;
     private float MAX_SPEED;
     private float START_SPEED;
     private float JUMP_HEIGHT;
@@ -37,13 +38,13 @@ public abstract class Entity extends Sprite implements Drawable {
     public void setPosX(int x) {
         setX(x * 32 + ((32 - this.getWidth()) / 2));
         destinationX = getX();
-        startX = getX();
+        startX = NO_ORIGIN;
     }
 
     public void setPosY(int y) {
         setY(y * 32);
         destinationY = getY();
-        startY = getY();
+        startY = NO_ORIGIN;
     }
 
     public int getPosX() {
@@ -117,6 +118,10 @@ public abstract class Entity extends Sprite implements Drawable {
             if (Math.abs(destinationY - getY()) < SKIP_ANIMATION_DISTANCE) {
                 setY(destinationY);
             }
+        }
+
+        if (Double.isNaN(offset)) {
+            offset = 0.0f;
         }
 
         float yTemp = getY();
