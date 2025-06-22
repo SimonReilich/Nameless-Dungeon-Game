@@ -3,6 +3,7 @@ package io.github.simonreilich.objects.Entities;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import io.github.simonreilich.UpdateType;
 import io.github.simonreilich.objects.Entities.enemies.Blob;
+import io.github.simonreilich.objects.Entities.enemies.Ghost;
 import io.github.simonreilich.objects.Entities.enemies.SlowBlob;
 
 public abstract class Enemy extends Entity {
@@ -14,6 +15,8 @@ public abstract class Enemy extends Entity {
     public static Enemy spawn(int spawnID, int x, int y) {
         if (Math.random() < 0.5) {
             return new Blob(x, y);
+        } else if (Math.random() < 0.5) {
+            return new Ghost(x, y);
         } else {
             return new SlowBlob(x, y);
         }
