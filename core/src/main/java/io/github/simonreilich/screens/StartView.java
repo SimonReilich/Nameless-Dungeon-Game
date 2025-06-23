@@ -26,7 +26,7 @@ public class StartView implements Screen {
     @Override
     public void render(float v) {
         batch.begin();
-        batch.draw(title.getTexture(), title.getX(), title.getY(),  title.getWidth(), title.getHeight());
+        title.draw(batch);
         batch.end();
     }
 
@@ -64,6 +64,6 @@ public class StartView implements Screen {
 
     @Override
     public void dispose() {
-
+        title.getTexture().dispose();
     }
 }
