@@ -9,18 +9,17 @@ import io.github.simonreilich.screens.MapView;
 
 public class Player extends Entity implements Drawable {
 
-    private MapView mapView;
     private boolean alive;
 
     public Player(MapView view) {
-        super(new Sprite(new Texture("sprites/player.png")), 15, 10);
-        this.mapView = view;
+        super(new Sprite(new Texture("sprites/player.png")), 15, 10, view);
         this.alive = true;
     }
 
     public void up() {
         if (mapView.inBounds(getPosX(), getPosY() + 1) && !mapView.occupied(getPosX(), getPosY() + 1) && destinationX == getX() && destinationY == getY() && alive) {
             super.up(1);
+            mapView.attack();
             mapView.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
         }
     }
@@ -28,6 +27,7 @@ public class Player extends Entity implements Drawable {
     public void left() {
         if (mapView.inBounds(getPosX() - 1, getPosY()) && !mapView.occupied(getPosX() - 1, getPosY()) && destinationX == getX() && destinationY == getY()  && alive) {
             super.left(1);
+            mapView.attack();
             mapView.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
         }
     }
@@ -35,6 +35,7 @@ public class Player extends Entity implements Drawable {
     public void down() {
         if (mapView.inBounds(getPosX(), getPosY() - 1) && !mapView.occupied(getPosX(), getPosY() - 1) && destinationX == getX() && destinationY == getY() && alive) {
             super.down(1);
+            mapView.attack();
             mapView.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
         }
     }
@@ -42,6 +43,7 @@ public class Player extends Entity implements Drawable {
     public void right() {
         if (mapView.inBounds(getPosX() + 1, getPosY()) && !mapView.occupied(getPosX() + 1, getPosY()) && destinationX == getX() && destinationY == getY() && alive) {
             super.right(1);
+            mapView.attack();
             mapView.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
         }
     }

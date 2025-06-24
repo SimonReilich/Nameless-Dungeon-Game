@@ -3,13 +3,14 @@ package io.github.simonreilich.objects.Entities.enemies;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import io.github.simonreilich.objects.Entities.Enemy;
+import io.github.simonreilich.screens.MapView;
 
 public class Blob extends Enemy {
 
     private int i = 0;
 
-    public Blob(int x, int y) {
-        super(new Sprite(new Texture("sprites/blob/01.png")), x, y);
+    public Blob(int x, int y, MapView mapView) {
+        super(new Sprite(new Texture("sprites/blob/01.png")), x, y, mapView);
     }
 
     @Override
@@ -29,7 +30,8 @@ public class Blob extends Enemy {
 
     @Override
     public void harm() {
-
+        super.mapView().dequeue(this);
+        this.dispose();
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import io.github.simonreilich.UpdateType;
 import io.github.simonreilich.objects.Drawable;
+import io.github.simonreilich.screens.MapView;
 
 public abstract class Entity extends Sprite implements Drawable {
 
@@ -23,7 +24,9 @@ public abstract class Entity extends Sprite implements Drawable {
     private float START_SPEED;
     private float JUMP_HEIGHT;
 
-    public Entity(Sprite sprite, int x, int y) {
+    protected MapView mapView;
+
+    public Entity(Sprite sprite, int x, int y, MapView mapView) {
         super(sprite);
         setPosX(x);
         setPosY(y);
@@ -33,6 +36,8 @@ public abstract class Entity extends Sprite implements Drawable {
         JUMP_HEIGHT = 8.0f;
 
         shadow = new Texture("sprites/shadow.png");
+
+        this.mapView = mapView;
     }
 
     public void setPosX(int x) {

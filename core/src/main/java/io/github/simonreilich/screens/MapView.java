@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import io.github.simonreilich.Model;
@@ -31,6 +33,11 @@ public class MapView implements Screen, DrawQueue {
     private RoomNode mapNode;
     private OrthogonalTiledMapRenderer renderer;
 
+    private boolean attack;
+    private Texture attackTex;
+    private int highscore;
+    private BitmapFont font;
+
     public void setModel(Model model) {
         this.model = model;
     }
@@ -53,17 +60,22 @@ public class MapView implements Screen, DrawQueue {
         mapNode = new RoomNode(lazyMap);
         roomGraph.addRoom(mapNode);
 
-        player.setPosX((Integer) mapNode.map.getLayers().get(0).getProperties().get("spawnX"));
-        player.setPosY((Integer) mapNode.map.getLayers().get(0).getProperties().get("spawnY"));
+        player.setPosX((Integer) mapNode.map.getLayers().get(0).getProperties().get("spawnX1"));
+        player.setPosY((Integer) mapNode.map.getLayers().get(0).getProperties().get("spawnY1"));
 
         for (int x = 0; x < 30; x++) {
             for (int y = 0; y < 20; y++) {
                 if (mapNode.map.getMapProperties(x, y).containsKey("spawn")) {
-                    this.enqueue(Enemy.spawn(mapNode.map.getMapProperties(x, y).get("spawn", Integer.class), x, y));
+                    this.enqueue(Enemy.spawn(mapNode.map.getMapProperties(x, y).get("spawn", Integer.class), x, y, this));
                 }
             }
         }
         this.enqueue(player);
+
+        attack = false;
+        attackTex = new Texture("sprites/attack.png");
+        highscore = 0;
+        font = new BitmapFont();
     }
 
     @Override
@@ -79,6 +91,16 @@ public class MapView implements Screen, DrawQueue {
         for (Drawable d : draw) {
             d.draw(camera, batch, delta);
         }
+
+        if (attack) {
+            batch.begin();
+            batch.draw(attackTex, 0, 0);
+            batch.end();
+        }
+
+        batch.begin();
+        font.draw(batch, Integer.toString(highscore), 0, 0);
+        batch.end();
     }
 
     @Override
@@ -193,18 +215,37 @@ public class MapView implements Screen, DrawQueue {
         draw.add(0, drawable);
     }
 
+    private void reloadMap(int index) {
+        renderer.setMap(mapNode.map.getMap());
+        dequeueAll();
+
+        for (int x = 0; x < 30; x++) {
+            for (int y = 0; y < 20; y++) {
+                if (mapNode.map.getMapProperties(x, y).containsKey("spawn")) {
+                    this.enqueue(Enemy.spawn(mapNode.map.getMapProperties(x, y).get("spawn", Integer.class), x, y, this));
+                }
+            }
+        }
+        this.enqueue(player);
+
+        player.setPosX((Integer) mapNode.map.getLayers().get(0).getProperties().get("spawnX" + index));
+        player.setPosY((Integer) mapNode.map.getLayers().get(0).getProperties().get("spawnY" + index));
+    }
+
     @Override
     public void updateAll(UpdateType type, float delta) {
 
         switch (type) {
             case PlayerMove:
                 // if the player steps on a door, the map changes
-                Object newMap = mapNode.map.getMapProperties(player.getPosX(), player.getPosY()).get("map");
+                Object newMap = mapNode.map.getMapProperties(player.getDestinationX(), player.getDestinationY()).get("map");
                 if (newMap instanceof Integer) {
+                    RoomNode oldRoom = mapNode;
                     mapNode = mapNode.getNeighbor((Integer) newMap);
                     mapNode.map.init();
-                    player.setPosX((Integer) mapNode.map.getLayers().get(0).getProperties().get("spawnX"));
-                    player.setPosY((Integer) mapNode.map.getLayers().get(0).getProperties().get("spawnY"));
+                    mapNode.setNeighbor(oldRoom, (Integer) newMap);
+                    renderer.setMap(mapNode.map.getMap());
+                    reloadMap((Integer) newMap);
                 }
         }
 
@@ -218,6 +259,41 @@ public class MapView implements Screen, DrawQueue {
         // Player interacts with all Entities, that are adjacent to him
         for (Entity entity : getEntitiesAdj(player.getDestinationX(), player.getDestinationY())) {
             player.interact(entity);
+        }
+    }
+
+    public void toggleAttack() {
+        attack = !attack;
+    }
+
+    public void up() {
+        player.up();
+        attack = false;
+    }
+
+    public void left() {
+        player.left();
+        attack = false;
+    }
+
+    public void right() {
+        player.right();
+        attack = false;
+    }
+
+    public void down() {
+        player.down();
+        attack = false;
+    }
+
+    public void attack() {
+        if (attack) {
+            getEntitiesAdj(player.getDestinationX(), player.getDestinationY()).forEach(entity -> {
+                if (entity instanceof Enemy) {
+                    entity.update(UpdateType.PlayerAttack, 0.0f);
+                    highscore++;
+                }
+            });
         }
     }
 }

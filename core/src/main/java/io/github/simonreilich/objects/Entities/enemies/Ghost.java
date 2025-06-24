@@ -3,13 +3,14 @@ package io.github.simonreilich.objects.Entities.enemies;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import io.github.simonreilich.objects.Entities.Enemy;
+import io.github.simonreilich.screens.MapView;
 
 public class Ghost extends Enemy {
 
     private int i;
 
-    public Ghost(int x, int y) {
-        super(new Sprite(new Texture("sprites/enemy_2.png")), x, y);
+    public Ghost(int x, int y, MapView mapView) {
+        super(new Sprite(new Texture("sprites/enemy_2.png")), x, y, mapView);
         i = 0;
     }
 
@@ -30,7 +31,8 @@ public class Ghost extends Enemy {
 
     @Override
     public void harm() {
-
+        super.mapView().dequeue(this);
+        this.dispose();
     }
 
     @Override

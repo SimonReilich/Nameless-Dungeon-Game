@@ -32,19 +32,19 @@ public class Model {
     }
 
     public void up() {
-        mapView.player.up();
+        mapView.up();
     }
 
     public void left() {
-        mapView.player.left();
+        mapView.left();
     }
 
     public void down() {
-        mapView.player.down();
+        mapView.down();
     }
 
     public void right() {
-        mapView.player.right();
+        mapView.right();
     }
 
     public void killed() {
@@ -70,6 +70,10 @@ public class Model {
             view.dispose();
             Gdx.app.exit();
         }
+    }
+
+    public void toggleAttack() {
+        mapView.toggleAttack();
     }
 
 }

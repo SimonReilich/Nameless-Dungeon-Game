@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="1">
- <tileset firstgid="1" name="test" tilewidth="32" tileheight="32" tilecount="3" columns="3">
-  <image source="tileset.png" width="96" height="32"/>
+ <tileset firstgid="1" name="test" tilewidth="32" tileheight="32" tilecount="6" columns="3">
+  <image source="tileset.png" width="96" height="64"/>
   <tile id="0">
    <properties>
     <property name="wakable" type="bool" value="true"/>
@@ -18,11 +18,33 @@
     <property name="wakable" type="bool" value="true"/>
    </properties>
   </tile>
+  <tile id="3">
+   <properties>
+    <property name="map" type="int" value="1"/>
+    <property name="wakable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="map" type="int" value="2"/>
+    <property name="wakable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="map" type="int" value="3"/>
+    <property name="wakable" type="bool" value="true"/>
+   </properties>
+  </tile>
  </tileset>
  <layer id="1" name="Kachelebene 1" width="30" height="20">
   <properties>
-   <property name="spawnX" type="int" value="8"/>
-   <property name="spawnY" type="int" value="5"/>
+   <property name="spawnX1" type="int" value="7"/>
+   <property name="spawnX2" type="int" value="22"/>
+   <property name="spawnX3" type="int" value="14"/>
+   <property name="spawnY1" type="int" value="11"/>
+   <property name="spawnY2" type="int" value="11"/>
+   <property name="spawnY3" type="int" value="4"/>
   </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -32,15 +54,15 @@
 0,0,0,0,0,0,2,1,1,1,1,1,1,2,0,0,2,1,1,1,1,1,1,2,0,0,0,0,0,0,
 0,0,0,0,0,0,2,1,1,1,3,1,1,2,0,0,2,1,1,1,3,1,1,2,0,0,0,0,0,0,
 0,0,0,0,0,0,2,1,1,1,1,1,1,2,0,0,2,1,1,1,1,1,1,2,0,0,0,0,0,0,
-0,0,0,0,0,0,2,1,1,1,1,1,1,2,0,0,2,1,1,1,1,1,1,2,0,0,0,0,0,0,
-0,0,0,0,0,0,2,1,1,1,1,1,1,2,0,0,2,1,1,1,1,1,1,2,0,0,0,0,0,0,
+0,0,0,0,0,0,2,4,1,1,1,1,1,2,0,0,2,1,1,1,1,1,5,2,0,0,0,0,0,0,
+0,0,0,0,0,0,2,4,1,1,1,1,1,2,0,0,2,1,1,1,1,1,5,2,0,0,0,0,0,0,
 0,0,0,0,0,0,2,1,1,1,1,1,1,2,2,2,2,1,1,1,1,1,1,2,0,0,0,0,0,0,
 0,0,0,0,0,0,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,0,0,0,0,0,0,
 0,0,0,0,0,0,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,0,0,0,0,0,0,
 0,0,0,0,0,0,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,0,0,0,0,0,0,
 0,0,0,0,0,0,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,0,0,0,0,0,0,
 0,0,0,0,0,0,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,0,0,0,0,0,0,
-0,0,0,0,0,0,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,0,0,0,0,0,0,
+0,0,0,0,0,0,2,1,1,1,1,1,1,1,6,6,1,1,1,1,1,1,1,2,0,0,0,0,0,0,
 0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

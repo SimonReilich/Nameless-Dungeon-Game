@@ -53,6 +53,9 @@ public class Controller extends InputAdapter {
             case Input.Keys.D:
                 model.right();
                 break;
+            case Input.Keys.Q:
+                model.toggleAttack();
+                break;
             case Input.Keys.ESCAPE:
                 model.nextView();
                 screen = Screen.End;

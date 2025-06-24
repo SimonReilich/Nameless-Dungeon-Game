@@ -29,4 +29,11 @@ public class RoomNode {
     public List<RoomNode> getNeighbors() {
         return neighbors;
     }
+
+    public void setNeighbor(RoomNode neighbor, int i) {
+        while (neighbors.size() <= i) {
+            neighbors.add(new RoomNode(new LazyMap()));
+        }
+        neighbors.set(i, neighbor);
+    }
 }
