@@ -63,13 +63,11 @@ public class MapView implements Screen, DrawQueue {
         player.setPosX((Integer) mapNode.map.getLayers().get(0).getProperties().get("spawnX1"));
         player.setPosY((Integer) mapNode.map.getLayers().get(0).getProperties().get("spawnY1"));
 
-        for (int x = 0; x < 30; x++) {
-            for (int y = 0; y < 20; y++) {
-                if (mapNode.map.getMapProperties(x, y).containsKey("spawn")) {
-                    this.enqueue(Enemy.spawn(mapNode.map.getMapProperties(x, y).get("spawn", Integer.class), x, y, this));
-                }
-            }
+        mapNode.initDrawables(this);
+        for (Drawable d : mapNode.getDrawables()) {
+            this.enqueue(d);
         }
+
         this.enqueue(player);
 
         attack = false;
@@ -219,12 +217,9 @@ public class MapView implements Screen, DrawQueue {
         renderer.setMap(mapNode.map.getMap());
         dequeueAll();
 
-        for (int x = 0; x < 30; x++) {
-            for (int y = 0; y < 20; y++) {
-                if (mapNode.map.getMapProperties(x, y).containsKey("spawn")) {
-                    this.enqueue(Enemy.spawn(mapNode.map.getMapProperties(x, y).get("spawn", Integer.class), x, y, this));
-                }
-            }
+        mapNode.initDrawables(this);
+        for (Drawable d : mapNode.getDrawables()) {
+            this.enqueue(d);
         }
         this.enqueue(player);
 
