@@ -1,11 +1,9 @@
-package io.github.simonreilich.objects.Entities;
+package io.github.simonreilich.objects.Entities.enemies;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import io.github.simonreilich.UpdateType;
 import io.github.simonreilich.graph.RoomNode;
-import io.github.simonreilich.objects.Entities.enemies.Blob;
-import io.github.simonreilich.objects.Entities.enemies.Ghost;
-import io.github.simonreilich.objects.Entities.enemies.SlowBlob;
+import io.github.simonreilich.objects.Entities.Entity;
 import io.github.simonreilich.screens.MapView;
 
 public abstract class Enemy extends Entity {

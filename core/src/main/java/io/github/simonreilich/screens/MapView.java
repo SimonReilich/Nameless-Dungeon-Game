@@ -15,7 +15,8 @@ import io.github.simonreilich.graph.LazyMap;
 import io.github.simonreilich.graph.RoomGraph;
 import io.github.simonreilich.graph.RoomNode;
 import io.github.simonreilich.objects.Drawable;
-import io.github.simonreilich.objects.Entities.Enemy;
+import io.github.simonreilich.objects.Entities.Item;
+import io.github.simonreilich.objects.Entities.enemies.Enemy;
 import io.github.simonreilich.objects.Entities.Entity;
 import io.github.simonreilich.objects.Entities.Player;
 
@@ -35,7 +36,7 @@ public class MapView implements Screen, DrawQueue {
 
     private boolean attack;
     private Texture attackTex;
-    private int highscore;
+    public int score;
     private BitmapFont font;
 
     public void setModel(Model model) {
@@ -72,7 +73,7 @@ public class MapView implements Screen, DrawQueue {
 
         attack = false;
         attackTex = new Texture("sprites/attack.png");
-        highscore = 0;
+        score = 0;
         font = new BitmapFont();
     }
 
@@ -97,7 +98,7 @@ public class MapView implements Screen, DrawQueue {
         }
 
         batch.begin();
-        font.draw(batch, Integer.toString(highscore), 0, 0);
+        font.draw(batch, Integer.toString(score), 0, 0);
         batch.end();
     }
 
@@ -130,6 +131,16 @@ public class MapView implements Screen, DrawQueue {
         renderer.dispose();
         mapNode = null;
         renderer = null;
+    }
+
+    public Set<Item> getItemsPos(int x, int y) {
+        Set<Item> items = new HashSet<>();
+        for (Drawable d : draw) {
+            if (d instanceof Item && ((Item) d).getPosX() == x && ((Item) d).getPosY() == y) {
+                items.add((Item) d);
+            }
+        }
+        return items;
     }
 
     public Set<Entity> getEntitiesPos(int x, int y) {
@@ -255,6 +266,11 @@ public class MapView implements Screen, DrawQueue {
         for (Entity entity : getEntitiesAdj(player.getDestinationX(), player.getDestinationY())) {
             player.interact(entity);
         }
+
+        // Player picks up items
+        for (Item item : getItemsPos(player.getDestinationX(), player.getDestinationY())) {
+            item.consume();
+        }
     }
 
     public void toggleAttack() {
@@ -286,7 +302,7 @@ public class MapView implements Screen, DrawQueue {
             getEntitiesAdj(player.getDestinationX(), player.getDestinationY()).forEach(entity -> {
                 if (entity instanceof Enemy) {
                     entity.update(UpdateType.PlayerAttack, 0.0f);
-                    highscore++;
+                    score++;
                 }
             });
         }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import io.github.simonreilich.UpdateType;
 import io.github.simonreilich.objects.Drawable;
+import io.github.simonreilich.objects.Entities.enemies.Enemy;
 import io.github.simonreilich.screens.MapView;
 
 public class Player extends Entity implements Drawable {
