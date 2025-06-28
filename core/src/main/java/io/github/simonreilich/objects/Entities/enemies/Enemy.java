@@ -17,11 +17,9 @@ public abstract class Enemy extends Entity {
 
     public static Enemy spawn(int spawnID, int x, int y, MapView mapView, RoomNode room) {
         if (Math.random() < 0.5) {
-            return new Blob(x, y, mapView, room);
-        } else if (Math.random() < 0.5) {
-            return new Ghost(x, y, mapView, room);
+            return new Bat(x, y, mapView, room);
         } else {
-            return new SlowBlob(x, y, mapView, room);
+            return new DarkKnight(x, y, mapView, room);
         }
     }
 

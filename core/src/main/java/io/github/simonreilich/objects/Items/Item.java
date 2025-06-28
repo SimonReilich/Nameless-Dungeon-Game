@@ -36,7 +36,7 @@ public abstract class Item extends Sprite implements Drawable {
     }
 
     public void setPosY(int y) {
-        setY(y * 32);
+        setY(y * 32 + 6);
     }
 
     public int getPosX() {
@@ -53,7 +53,7 @@ public abstract class Item extends Sprite implements Drawable {
         batch.setProjectionMatrix(cam.combined);
 
         batch.begin();
-        batch.draw(shadow, getX(), getY() + (getHeight() * 0.075f), getWidth(), (getHeight() * 0.25f));
+        batch.draw(shadow, getX(), getY() - (getHeight() * 0.25f) * 0.33f, getWidth(), (getHeight() * 0.25f));
         batch.end();
 
         batch.begin();

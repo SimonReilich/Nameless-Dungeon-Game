@@ -47,7 +47,7 @@ public abstract class Entity extends Sprite implements Drawable {
     }
 
     public void setPosY(int y) {
-        setY(y * 32);
+        setY(y * 32 + 6);
         destinationY = getY();
         startY = NO_ORIGIN;
     }
@@ -133,7 +133,7 @@ public abstract class Entity extends Sprite implements Drawable {
         setY(yTemp + (offset * JUMP_HEIGHT));
 
         batch.begin();
-        batch.draw(shadow, getX(), yTemp + (getHeight() * 0.075f), getWidth(), (getHeight() * 0.25f));
+        batch.draw(shadow, getX(), yTemp - (getHeight() * 0.25f) * 0.33f, getWidth(), (getHeight() * 0.25f));
         batch.end();
 
         batch.begin();

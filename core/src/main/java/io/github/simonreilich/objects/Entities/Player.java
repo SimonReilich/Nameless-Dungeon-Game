@@ -13,7 +13,7 @@ public class Player extends Entity implements Drawable {
     private boolean alive;
 
     public Player(MapView view) {
-        super(new Sprite(new Texture("sprites/player.png")), 15, 10, view);
+        super(new Sprite(new Texture("sprites/entities/hero_basic.png")), 15, 10, view);
         this.alive = true;
     }
 
@@ -53,7 +53,7 @@ public class Player extends Entity implements Drawable {
         if (entity instanceof Enemy && alive) {
             alive = false;
             this.getTexture().dispose();
-            this.setTexture(new Texture("sprites/player_dead.png"));
+            this.setTexture(new Texture("sprites/entities/hero_dead.png"));
         }
     }
 
