@@ -8,13 +8,13 @@ import io.github.simonreilich.screens.MapView;
 public class DarkKnight extends Enemy {
 
     public DarkKnight(int x, int y, MapView mapView, RoomNode room) {
-        super(new Sprite(new Texture("sprites/entities/monster_dark_knight.png")), x, y, mapView, room);
+        super(new Sprite(new Texture("sprites/entities/dark_knight.png")), x, y, mapView, room);
     }
 
     @Override
     public void move() {
-        int playerX = mapView.player.getDestinationX();
-        int playerY = mapView.player.getDestinationY();
+        int playerX = mapView.hero.getDestinationX();
+        int playerY = mapView.hero.getDestinationY();
 
         // A* Algorithm
     }

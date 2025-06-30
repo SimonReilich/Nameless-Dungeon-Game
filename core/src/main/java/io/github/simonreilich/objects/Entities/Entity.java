@@ -35,7 +35,7 @@ public abstract class Entity extends Sprite implements Drawable {
         START_SPEED = 0.2f;
         JUMP_HEIGHT = 8.0f;
 
-        shadow = new Texture("sprites/shadow.png");
+        shadow = new Texture("sprites/misc/shadow.png");
 
         this.mapView = mapView;
     }
@@ -133,7 +133,7 @@ public abstract class Entity extends Sprite implements Drawable {
         setY(yTemp + (offset * JUMP_HEIGHT));
 
         batch.begin();
-        batch.draw(shadow, getX(), yTemp - (getHeight() * 0.25f) * 0.33f, getWidth(), (getHeight() * 0.25f));
+        batch.draw(shadow, getX() + (getWidth() * 0.1f), yTemp - (getHeight() * 0.5f) * 0.33f, getWidth() * 0.8f, getHeight() * 0.5f);
         batch.end();
 
         batch.begin();

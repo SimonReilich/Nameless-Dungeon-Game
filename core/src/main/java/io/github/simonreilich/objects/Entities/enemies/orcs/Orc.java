@@ -1,0 +1,48 @@
+package io.github.simonreilich.objects.Entities.enemies.orcs;
+
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import io.github.simonreilich.graph.RoomNode;
+import io.github.simonreilich.objects.Entities.enemies.Enemy;
+import io.github.simonreilich.screens.MapView;
+
+public class Orc extends Enemy {
+
+    public Orc(int x, int y, MapView mapView, RoomNode room) {
+        super(new Sprite(new Texture("sprites/entities/orcs/variants/orc.png")), x, y, mapView, room);
+
+        double variant = Math.random();
+        if (variant < 0.2) {
+            return;
+        } else if (variant < 0.4) {
+            this.getTexture().dispose();
+            this.set(new Sprite(new Texture("sprites/entities/orcs/variants/orc_armored.png")));
+        } else if (variant < 0.6) {
+            this.getTexture().dispose();
+            this.set(new Sprite(new Texture("sprites/entities/orcs/variants/orc_masked.png")));
+        } else if (variant < 0.8) {
+            this.getTexture().dispose();
+            this.set(new Sprite(new Texture("sprites/entities/orcs/variants/orc_shaman.png")));
+        } else {
+            this.getTexture().dispose();
+            this.set(new Sprite(new Texture("sprites/entities/orcs/variants/orc_veteran.png")));
+        }
+        this.setPosX(x);
+        this.setPosY(y);
+    }
+
+    @Override
+    public void move() {
+
+    }
+
+    @Override
+    public void harm() {
+
+    }
+
+    @Override
+    public void attack() {
+
+    }
+}

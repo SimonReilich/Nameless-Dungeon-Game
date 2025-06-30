@@ -18,7 +18,7 @@ public class StartView implements Screen {
 
         batch = new SpriteBatch();
 
-        title = new Sprite(new Texture("title.png"));
+        title = new Sprite(new Texture("interface/title.png"));
 
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }

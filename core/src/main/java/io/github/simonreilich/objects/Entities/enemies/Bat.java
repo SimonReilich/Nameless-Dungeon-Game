@@ -10,7 +10,7 @@ public class Bat extends Enemy {
     private int i = 0;
 
     public Bat(int x, int y, MapView mapView, RoomNode room) {
-        super(new Sprite(new Texture("sprites/entities/monster_bat.png")), x, y, mapView, room);
+        super(new Sprite(new Texture("sprites/entities/bat.png")), x, y, mapView, room);
     }
 
     @Override

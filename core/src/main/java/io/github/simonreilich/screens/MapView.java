@@ -9,26 +9,28 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.simonreilich.Model;
 import io.github.simonreilich.UpdateType;
 import io.github.simonreilich.graph.LazyMap;
 import io.github.simonreilich.graph.RoomGraph;
 import io.github.simonreilich.graph.RoomNode;
 import io.github.simonreilich.objects.Drawable;
-import io.github.simonreilich.objects.Entities.Item;
 import io.github.simonreilich.objects.Entities.enemies.Enemy;
 import io.github.simonreilich.objects.Entities.Entity;
-import io.github.simonreilich.objects.Entities.Player;
+import io.github.simonreilich.objects.Entities.Hero;
+import io.github.simonreilich.objects.Items.Item;
 
 import java.util.*;
 
 public class MapView implements Screen, DrawQueue {
 
     private Model model;
-    private OrthographicCamera camera;
+    private Viewport viewport;
     private Batch batch;
     private List<Drawable> draw;
-    public Player player;
+    public Hero hero;
 
     private RoomGraph roomGraph;
     private RoomNode mapNode;
@@ -39,6 +41,10 @@ public class MapView implements Screen, DrawQueue {
     public int score;
     private BitmapFont font;
 
+    private final int[] backgroundLayer = new int[]{4,5};
+    private final int[] foregroundLayer = new int[]{6};
+    private final int doorLayer = 0;
+
     public void setModel(Model model) {
         this.model = model;
     }
@@ -46,14 +52,14 @@ public class MapView implements Screen, DrawQueue {
     @Override
     public void show() {
 
-        camera = new OrthographicCamera();
+        OrthographicCamera camera = new OrthographicCamera();
         camera.position.set(32 * 15, 32 * 10, 0);
-        camera.zoom = 0.35f;
+        viewport = new FitViewport(30 * 32, 20 * 32);
         batch = new SpriteBatch();
 
         draw = new ArrayList<>();
 
-        this.player = new Player(this);
+        this.hero = new Hero(this);
 
         roomGraph = new RoomGraph();
         LazyMap lazyMap = new LazyMap();
@@ -61,35 +67,39 @@ public class MapView implements Screen, DrawQueue {
         mapNode = new RoomNode(lazyMap);
         roomGraph.addRoom(mapNode);
 
-        player.setPosX((Integer) mapNode.map.getLayers().get(0).getProperties().get("spawnX1"));
-        player.setPosY((Integer) mapNode.map.getLayers().get(0).getProperties().get("spawnY1"));
+        hero.setPosX((Integer) mapNode.map.getLayers().get(0).getProperties().get("spawnX1"));
+        hero.setPosY((Integer) mapNode.map.getLayers().get(0).getProperties().get("spawnY1"));
 
         mapNode.initDrawables(this);
         for (Drawable d : mapNode.getDrawables()) {
             this.enqueue(d);
         }
 
-        this.enqueue(player);
+        this.enqueue(hero);
 
         attack = false;
-        attackTex = new Texture("sprites/attack.png");
+        attackTex = new Texture("interface/attack.png");
         score = 0;
         font = new BitmapFont();
     }
 
     @Override
     public void render(float delta) {
+
         if (renderer == null) return;
 
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(0.11f, 0.07f, 0.09f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        renderer.setView(camera);
-        renderer.render();
+        renderer.setView((OrthographicCamera) viewport.getCamera());
+        viewport.apply();
+        renderer.render(backgroundLayer);
 
         for (Drawable d : draw) {
-            d.draw(camera, batch, delta);
+            d.draw((OrthographicCamera) viewport.getCamera(), batch, delta);
         }
+
+        renderer.render(foregroundLayer);
 
         if (attack) {
             batch.begin();
@@ -98,15 +108,13 @@ public class MapView implements Screen, DrawQueue {
         }
 
         batch.begin();
-        font.draw(batch, Integer.toString(score), 0, 0);
+        font.draw(batch, Integer.toString(score), 32, 32);
         batch.end();
     }
 
     @Override
     public void resize(int width, int height) {
-        camera.viewportWidth = width;
-        camera.viewportHeight = height;
-        camera.update();
+        viewport.update(width, height, true);
     }
 
     @Override
@@ -232,10 +240,10 @@ public class MapView implements Screen, DrawQueue {
         for (Drawable d : mapNode.getDrawables()) {
             this.enqueue(d);
         }
-        this.enqueue(player);
+        this.enqueue(hero);
 
-        player.setPosX((Integer) mapNode.map.getLayers().get(0).getProperties().get("spawnX" + index));
-        player.setPosY((Integer) mapNode.map.getLayers().get(0).getProperties().get("spawnY" + index));
+        hero.setPosX((Integer) mapNode.map.getLayers().get(doorLayer).getProperties().get("spawnX" + (index + 1)));
+        hero.setPosY((Integer) mapNode.map.getLayers().get(doorLayer).getProperties().get("spawnY" + (index + 1)));
     }
 
     @Override
@@ -244,7 +252,7 @@ public class MapView implements Screen, DrawQueue {
         switch (type) {
             case PlayerMove:
                 // if the player steps on a door, the map changes
-                Object newMap = mapNode.map.getMapProperties(player.getDestinationX(), player.getDestinationY()).get("map");
+                Object newMap = mapNode.map.getMapProperties(hero.getDestinationX(), hero.getDestinationY()).get("map");
                 if (newMap instanceof Integer) {
                     RoomNode oldRoom = mapNode;
                     mapNode = mapNode.getNeighbor((Integer) newMap);
@@ -263,12 +271,12 @@ public class MapView implements Screen, DrawQueue {
         }
 
         // Player interacts with all Entities, that are adjacent to him
-        for (Entity entity : getEntitiesAdj(player.getDestinationX(), player.getDestinationY())) {
-            player.interact(entity);
+        for (Entity entity : getEntitiesAdj(hero.getDestinationX(), hero.getDestinationY())) {
+            hero.interact(entity);
         }
 
         // Player picks up items
-        for (Item item : getItemsPos(player.getDestinationX(), player.getDestinationY())) {
+        for (Item item : getItemsPos(hero.getDestinationX(), hero.getDestinationY())) {
             item.consume();
         }
     }
@@ -278,28 +286,28 @@ public class MapView implements Screen, DrawQueue {
     }
 
     public void up() {
-        player.up();
+        hero.up();
         attack = false;
     }
 
     public void left() {
-        player.left();
+        hero.left();
         attack = false;
     }
 
     public void right() {
-        player.right();
+        hero.right();
         attack = false;
     }
 
     public void down() {
-        player.down();
+        hero.down();
         attack = false;
     }
 
     public void attack() {
         if (attack) {
-            getEntitiesAdj(player.getDestinationX(), player.getDestinationY()).forEach(entity -> {
+            getEntitiesAdj(hero.getDestinationX(), hero.getDestinationY()).forEach(entity -> {
                 if (entity instanceof Enemy) {
                     entity.update(UpdateType.PlayerAttack, 0.0f);
                     score++;

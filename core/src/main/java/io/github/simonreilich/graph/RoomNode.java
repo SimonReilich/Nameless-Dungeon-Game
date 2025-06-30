@@ -51,10 +51,9 @@ public class RoomNode {
                 for (int y = 0; y < 20; y++) {
                     if (this.map.getMapProperties(x, y).containsKey("spawn")) {
                         drawables.add(Enemy.spawn(this.map.getMapProperties(x, y).get("spawn", Integer.class), x, y, mapView, this));
-                    } else if (this.map.getMapProperties(x, y).get("wakable", false, Boolean.class)) {
-                        if (Math.random() < 0.025) {
-                            drawables.add(new Coin(x, y, mapView, this));
-                        }
+                    }
+                    if (this.map.getMapProperties(x, y).containsKey("item")) {
+                        drawables.add(new Coin(x, y, mapView, this));
                     }
                 }
             }

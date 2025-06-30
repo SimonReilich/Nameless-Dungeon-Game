@@ -1,4 +1,4 @@
-package io.github.simonreilich.objects.Entities;
+package io.github.simonreilich.objects.Items;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -26,7 +26,7 @@ public abstract class Item extends Sprite implements Drawable {
 
         this.room = room;
 
-        shadow = new Texture("sprites/shadow.png");
+        shadow = new Texture("sprites/misc/shadow.png");
 
         this.mapView = mapView;
     }
@@ -53,7 +53,7 @@ public abstract class Item extends Sprite implements Drawable {
         batch.setProjectionMatrix(cam.combined);
 
         batch.begin();
-        batch.draw(shadow, getX(), getY() - (getHeight() * 0.25f) * 0.33f, getWidth(), (getHeight() * 0.25f));
+        batch.draw(shadow, getX(), getY() - (getHeight() * 0.5f) * 0.33f, getWidth(), (getHeight() * 0.5f));
         batch.end();
 
         batch.begin();

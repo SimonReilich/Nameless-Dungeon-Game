@@ -1,0 +1,49 @@
+package io.github.simonreilich.objects.Entities.enemies.hell;
+
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import io.github.simonreilich.Consts;
+import io.github.simonreilich.graph.RoomNode;
+import io.github.simonreilich.objects.Entities.enemies.Enemy;
+import io.github.simonreilich.screens.MapView;
+
+public class SmallDemon extends Enemy {
+
+    public SmallDemon(int x, int y, MapView mapView, RoomNode room) {
+        super(new Sprite(new Texture("sprites/entities/hell/small/bies.png")) , x, y, mapView, room);
+
+        double variant = Math.random();
+        if (variant < 0.2) {
+            return;
+        } else if (variant < 0.4) {
+            this.getTexture().dispose();
+            this.set(new Sprite(new Texture("sprites/entities/hell/small/chort.png")));
+        } else if (variant < 0.6) {
+            this.getTexture().dispose();
+            this.set(new Sprite(new Texture("sprites/entities/hell/small/imp.png")));
+        } else if (variant < 0.8) {
+            this.getTexture().dispose();
+            this.set(new Sprite(new Texture("sprites/entities/hell/small/rokita.png")));
+        } else {
+            this.getTexture().dispose();
+            this.set(new Sprite(new Texture("sprites/entities/hell/small/wogol.png")));
+        }
+        this.setPosX(x);
+        this.setPosY(y);
+    }
+
+    @Override
+    public void move() {
+
+    }
+
+    @Override
+    public void harm() {
+
+    }
+
+    @Override
+    public void attack() {
+
+    }
+}
