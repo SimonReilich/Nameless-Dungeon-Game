@@ -1,5 +1,6 @@
 package io.github.simonreilich.objects.Items;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -52,9 +53,14 @@ public abstract class Item extends Sprite implements Drawable {
         cam.update();
         batch.setProjectionMatrix(cam.combined);
 
+        Color c = batch.getColor();
+        batch.setColor(c.r, c.g, c.b, 0.3f);
+
         batch.begin();
         batch.draw(shadow, getX(), getY() - (getHeight() * 0.5f) * 0.33f, getWidth(), (getHeight() * 0.5f));
         batch.end();
+
+        batch.setColor(c.r, c.g, c.b, 1.0f);
 
         batch.begin();
         super.draw(batch);

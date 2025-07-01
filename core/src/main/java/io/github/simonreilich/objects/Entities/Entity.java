@@ -1,5 +1,6 @@
 package io.github.simonreilich.objects.Entities;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -132,9 +133,14 @@ public abstract class Entity extends Sprite implements Drawable {
         float yTemp = getY();
         setY(yTemp + (offset * JUMP_HEIGHT));
 
+        Color c = batch.getColor();
+        batch.setColor(c.r, c.g, c.b, 0.3f);
+
         batch.begin();
         batch.draw(shadow, getX() + (getWidth() * 0.1f), yTemp - (getHeight() * 0.5f) * 0.33f, getWidth() * 0.8f, getHeight() * 0.5f);
         batch.end();
+
+        batch.setColor(c.r, c.g, c.b, 1.0f);
 
         batch.begin();
         super.draw(batch);

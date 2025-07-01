@@ -2,6 +2,7 @@ package io.github.simonreilich.objects.Entities.enemies;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import io.github.simonreilich.Consts;
 import io.github.simonreilich.graph.RoomNode;
 import io.github.simonreilich.screens.MapView;
 
@@ -32,12 +33,30 @@ public class Zombie extends Enemy {
 
     @Override
     public void move() {
-
+        int relPlayerX = mapView.hero.getDestinationX() - getPosX();
+        int relPlayerY = mapView.hero.getDestinationY() - getPosY();
+        if (Math.random() < Consts.zombieActiveProb && Math.sqrt(Math.pow(relPlayerX, 2) + Math.pow(relPlayerY, 2)) <= Consts.zombieRange) {
+            if (Math.abs(relPlayerX) > Math.abs(relPlayerY)) {
+                if (relPlayerX > 0 && mapView().free(getPosX() + 1, getPosY())) {
+                    right(1);
+                } else if (relPlayerX < 0 && mapView().free(getPosX() - 1, getPosY())) {
+                    left(1);
+                }
+            } else {
+                if (relPlayerY > 0 && mapView().free(getPosX(), getPosY() + 1)) {
+                    up(1);
+                } else if (relPlayerY < 0 && mapView().free(getPosX(), getPosY() - 1)) {
+                    down(1);
+                }
+            }
+        }
     }
 
     @Override
     public void harm() {
-
+        super.mapView().dequeue(this);
+        super.room.removeDrawable(this);
+        this.dispose();
     }
 
     @Override

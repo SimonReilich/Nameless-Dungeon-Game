@@ -9,6 +9,8 @@ import io.github.simonreilich.screens.MapView;
 
 public class Goo extends Enemy {
 
+    private int originX, originY;
+
     public Goo(int x, int y, MapView mapView, RoomNode room) {
         super(new Sprite(new Texture("sprites/entities/elements/goo/elemental_goo.png")) , x, y, mapView, room);
 
@@ -18,16 +20,30 @@ public class Goo extends Enemy {
             this.setPosX(x);
             this.setPosY(y);
         }
+
+        originX = x;
+        originY = y;
     }
 
     @Override
     public void move() {
-
+        double direction = Math.random();
+        if (direction < 0.25 && mapView().free(this.getPosX(), this.getPosY() + 1)) {
+            up(1);
+        } else if (direction < 0.50 && mapView().free(this.getPosX(), this.getPosY() - 1)) {
+            down(1);
+        } else if (direction < 0.75 && mapView().free(this.getPosX() + 1, this.getPosY())) {
+            right(1);
+        } else if (mapView().free(this.getPosX() - 1, this.getPosY())) {
+            left(1);
+        }
     }
 
     @Override
     public void harm() {
-
+        super.mapView().dequeue(this);
+        super.room.removeDrawable(this);
+        this.dispose();
     }
 
     @Override

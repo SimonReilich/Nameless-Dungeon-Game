@@ -47,6 +47,10 @@ public class Model {
         mapView.right();
     }
 
+    public void skip() {
+        mapView.skip();
+    }
+
     public void killed() {
         try {
             Thread.sleep(1000);
@@ -74,6 +78,11 @@ public class Model {
 
     public void toggleAttack() {
         mapView.toggleAttack();
+    }
+
+    public void restart() {
+        view.create();
+        endView.dispose();
     }
 
 }

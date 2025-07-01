@@ -20,7 +20,8 @@ public class EndView implements Screen {
 
     @Override
     public void render(float v) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+
+        Gdx.gl.glClearColor(0.11f, 0.07f, 0.09f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 

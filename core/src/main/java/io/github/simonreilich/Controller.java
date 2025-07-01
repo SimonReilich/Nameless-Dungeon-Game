@@ -56,6 +56,9 @@ public class Controller extends InputAdapter {
             case Input.Keys.Q:
                 model.toggleAttack();
                 break;
+            case Input.Keys.SPACE:
+                model.skip();
+                break;
             case Input.Keys.ESCAPE:
                 model.nextView();
                 screen = Screen.End;
@@ -73,6 +76,10 @@ public class Controller extends InputAdapter {
 
     private boolean end(int keycode) {
         switch (keycode) {
+            case Input.Keys.SPACE:
+                model.restart();
+                screen = Screen.Start;
+                break;
             case Input.Keys.ESCAPE:
                 model.nextView();
                 break;

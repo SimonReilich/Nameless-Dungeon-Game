@@ -305,6 +305,10 @@ public class MapView implements Screen, DrawQueue {
         attack = false;
     }
 
+    public void skip() {
+        updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
+    }
+
     public void attack() {
         if (attack) {
             getEntitiesAdj(hero.getDestinationX(), hero.getDestinationY()).forEach(entity -> {
@@ -314,5 +318,9 @@ public class MapView implements Screen, DrawQueue {
                 }
             });
         }
+    }
+
+    public boolean free(int x, int y) {
+        return !occupied(x, y) && inBounds(x, y) && getItemsPos(x, y).isEmpty();
     }
 }

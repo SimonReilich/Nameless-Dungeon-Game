@@ -9,6 +9,8 @@ import io.github.simonreilich.screens.MapView;
 
 public class Fire extends Enemy {
 
+    private boolean up;
+
     public Fire(int x, int y, MapView mapView, RoomNode room) {
         super(new Sprite(new Texture("sprites/entities/elements/fire/elemental_fire.png")) , x, y, mapView, room);
 
@@ -18,16 +20,26 @@ public class Fire extends Enemy {
             this.setPosX(x);
             this.setPosY(y);
         }
+
+        up = true;
     }
 
     @Override
     public void move() {
-
+        if (up) {
+            up(1);
+            up = mapView.free(this.getDestinationX(), this.getDestinationY() + 1);
+        } else {
+            down(1);
+            up = !mapView.free(this.getDestinationX(), this.getDestinationY() - 1);
+        }
     }
 
     @Override
     public void harm() {
-
+        super.mapView().dequeue(this);
+        super.room.removeDrawable(this);
+        this.dispose();
     }
 
     @Override
