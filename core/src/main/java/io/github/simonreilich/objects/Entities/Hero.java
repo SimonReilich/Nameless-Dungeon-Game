@@ -10,7 +10,7 @@ import io.github.simonreilich.screens.MapView;
 
 public class Hero extends Entity implements Drawable {
 
-    private boolean alive;
+    public boolean alive;
 
     public Hero(MapView view) {
         super(new Sprite(new Texture("sprites/heros/basic.png")), 15, 10, view);

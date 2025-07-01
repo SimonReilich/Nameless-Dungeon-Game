@@ -43,7 +43,7 @@ public class MapView implements Screen, DrawQueue {
 
     private final int[] backgroundLayer = new int[]{4,5};
     private final int[] foregroundLayer = new int[]{6};
-    private final int doorLayer = 0;
+    private final int spawnLayer = 0;
 
     public void setModel(Model model) {
         this.model = model;
@@ -242,8 +242,8 @@ public class MapView implements Screen, DrawQueue {
         }
         this.enqueue(hero);
 
-        hero.setPosX((Integer) mapNode.map.getLayers().get(doorLayer).getProperties().get("spawnX" + (index + 1)));
-        hero.setPosY((Integer) mapNode.map.getLayers().get(doorLayer).getProperties().get("spawnY" + (index + 1)));
+        hero.setPosX((Integer) mapNode.map.getLayers().get(spawnLayer).getProperties().get("spawnX" + (index + 1)));
+        hero.setPosY((Integer) mapNode.map.getLayers().get(spawnLayer).getProperties().get("spawnY" + (index + 1)));
     }
 
     @Override
@@ -306,7 +306,9 @@ public class MapView implements Screen, DrawQueue {
     }
 
     public void skip() {
-        updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
+        if (hero.alive) {
+            updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
+        }
     }
 
     public void attack() {
