@@ -263,21 +263,28 @@ public class MapView implements Screen, DrawQueue {
                 }
         }
 
-        // every entity gets updated
-        for (Drawable d : draw) {
-            if (d instanceof Entity) {
-                ((Entity) d).update(type, delta);
-            }
-        }
-
         // Player interacts with all Entities, that are adjacent to him
         for (Entity entity : getEntitiesAdj(hero.getDestinationX(), hero.getDestinationY())) {
             hero.interact(entity);
         }
 
-        // Player picks up items
-        for (Item item : getItemsPos(hero.getDestinationX(), hero.getDestinationY())) {
-            item.consume();
+        if (hero.alive) {
+            // every entity gets updated
+            for (Drawable d : draw) {
+                if (d instanceof Entity) {
+                    ((Entity) d).update(type, delta);
+                }
+            }
+
+            // Player interacts with all Entities, that are adjacent to him
+            for (Entity entity : getEntitiesAdj(hero.getDestinationX(), hero.getDestinationY())) {
+                hero.interact(entity);
+            }
+
+            // Player picks up items
+            for (Item item : getItemsPos(hero.getDestinationX(), hero.getDestinationY())) {
+                item.consume();
+            }
         }
     }
 
