@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import io.github.simonreilich.screens.EndView;
 import io.github.simonreilich.screens.MapView;
 import io.github.simonreilich.screens.StartView;
+import io.github.simonreilich.util.UpdateType;
 
 public class Model {
 
@@ -20,6 +21,7 @@ public class Model {
         this.startView = new StartView();
         this.mapView = new MapView();
         this.endView = new EndView();
+        this.startView.setModel(this);
         this.mapView.setModel(this);
         this.view.setScreen(startView);
     }
@@ -62,11 +64,17 @@ public class Model {
         }
     }
 
+    public void clicked(int mouseX, int mouseY) {
+        startView.click(mouseX, mouseY);
+    }
+
     public void nextView() {
         if (this.view.getScreen() == startView) {
             this.view.setScreen(mapView);
+            controller.setMap();
         } else if (this.view.getScreen() == mapView) {
             this.view.setScreen(endView);
+            controller.setEnd();
         } else {
             startView.dispose();
             mapView.dispose();

@@ -1,7 +1,9 @@
 package io.github.simonreilich;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import io.github.simonreilich.util.Screen;
 
 public class Controller extends InputAdapter {
 
@@ -29,12 +31,18 @@ public class Controller extends InputAdapter {
         return super.keyDown(keycode);
     }
 
+    @Override public boolean touchDown (int screenX, int screenY, int pointer, int button) {
+        // ignore if its not left mouse button or first touch pointer
+        if (button != Input.Buttons.LEFT || pointer > 0) return false;
+        if (screen == Screen.Start) {
+            model.clicked(screenX, Gdx.graphics.getHeight() - screenY);
+        }
+        return true;
+    }
+
     private boolean start(int keycode) {
         switch (keycode) {
-            case Input.Keys.SPACE:
-                model.nextView();
-                screen = Screen.Map;
-                break;
+
         }
         return super.keyDown(keycode);
     }
@@ -87,8 +95,21 @@ public class Controller extends InputAdapter {
         return super.keyDown(keycode);
     }
 
+    public void setStart() {
+        screen = Screen.Start;
+    }
+
+    public void setMap() {
+        screen = Screen.Map;
+    }
+
+    public void setMenu() {
+        screen = Screen.Menu;
+    }
+
+    public void setEnd() {
+        screen = Screen.End;
+    }
+
 }
 
-enum Screen {
-    Start, Map, Menu, End
-}

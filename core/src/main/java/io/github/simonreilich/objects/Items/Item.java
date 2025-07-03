@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import io.github.simonreilich.UpdateType;
 import io.github.simonreilich.graph.RoomNode;
 import io.github.simonreilich.objects.Drawable;
 import io.github.simonreilich.screens.MapView;

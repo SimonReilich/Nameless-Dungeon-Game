@@ -9,24 +9,32 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import io.github.simonreilich.Model;
+import io.github.simonreilich.ui.Button;
+import io.github.simonreilich.ui.Div;
+import io.github.simonreilich.ui.UiElement;
+import io.github.simonreilich.util.Align;
 
 public class StartView implements Screen {
 
     private Batch batch;
     private Sprite lib;
     private Sprite title;
-    private BitmapFont font;
 
     private final float libLogoFadeInStart = 0.0f;
-    private final float libLogoFadeInEnd = 1.0f;
+    private final float libLogoFadeInEnd = 0.5f;
 
-    private final float libLogoFadeOutStart = 3.0f;
-    private final float libLogoFadeOutEnd = 4.0f;
+    private final float libLogoFadeOutStart = 1.5f;
+    private final float libLogoFadeOutEnd = 2.0f;
 
-    private final float gameLogoFadeInStart = 5.0f;
-    private final float gameLogoFadeInEnd = 6.0f;
+    private final float gameLogoFadeInStart = 2.5f;
+    private final float gameLogoFadeInEnd = 3.0f;
 
     private float time;
+
+    private Div div;
+
+    private Model model;
 
     @Override
     public void show() {
@@ -35,11 +43,28 @@ public class StartView implements Screen {
 
         lib = new Sprite(new Texture("interface/libgdx.png"));
         title = new Sprite(new Texture("interface/title.png"));
-        font = new BitmapFont();
 
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         time = 0.0f;
+
+        div  = new Div(0, 0, (float) Gdx.graphics.getWidth() / UiElement.size, (float) Gdx.graphics.getHeight() / UiElement.size / 2, Align.TOP,
+            new Button(0, 0, 5, "Play") {
+                @Override
+                public void clicked() {
+                    model.nextView();
+                }
+            },
+            new Button(0, 0, 5, "Close") {
+                @Override
+                public void clicked() {
+                    Gdx.app.exit();
+                }
+            });
+    }
+
+    public void setModel(Model model) {
+        this.model = model;
     }
 
     @Override
@@ -76,9 +101,7 @@ public class StartView implements Screen {
             batch.draw(title, title.getX(), title.getY(), title.getWidth(), title.getHeight());
             batch.end();
 
-            batch.begin();
-            font.draw(batch, "Press [SPACE] to continue", 64, 64);
-            batch.end();
+            div.draw((SpriteBatch) batch);
         }
     }
 
@@ -87,15 +110,15 @@ public class StartView implements Screen {
         float width = Gdx.graphics.getWidth();
         float height = Gdx.graphics.getHeight();
 
-        while (width <= title.getWidth() && height <= title.getHeight()) {
+        while (width <= title.getWidth() && height / 2 <= title.getHeight()) {
             title.setBounds(0, 0, title.getWidth() / 2, title.getHeight() / 2);
         }
 
-        while (width > 3 * title.getWidth() && height > 3 * title.getHeight()) {
+        while (width > 3 * title.getWidth() && height / 2 > 3 * title.getHeight()) {
             title.setBounds(0, 0, title.getWidth() * 2, title.getHeight() * 2);
         }
 
-        title.setCenter((float) Gdx.graphics.getWidth() / 2, (float) Gdx.graphics.getHeight() / 2);
+        title.setCenter((float) Gdx.graphics.getWidth() / 2, (float) (3 * Gdx.graphics.getHeight()) / 4);
 
         while (width <= lib.getWidth() && height <= lib.getHeight()) {
             lib.setBounds(0, 0, lib.getWidth() / 2, lib.getHeight() / 2);
@@ -107,6 +130,10 @@ public class StartView implements Screen {
 
         lib.setCenter((float) Gdx.graphics.getWidth() / 2, (float) Gdx.graphics.getHeight() / 2);
 
+    }
+
+    public void click(int mouseX, int mouseY) {
+        div.update(mouseX, mouseY);
     }
 
     @Override

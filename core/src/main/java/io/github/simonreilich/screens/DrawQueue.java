@@ -1,6 +1,6 @@
 package io.github.simonreilich.screens;
 
-import io.github.simonreilich.UpdateType;
+import io.github.simonreilich.util.UpdateType;
 import io.github.simonreilich.objects.Drawable;
 
 public interface DrawQueue {

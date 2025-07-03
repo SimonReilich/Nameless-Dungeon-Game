@@ -12,7 +12,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.simonreilich.Model;
-import io.github.simonreilich.UpdateType;
+import io.github.simonreilich.util.UpdateType;
 import io.github.simonreilich.graph.LazyMap;
 import io.github.simonreilich.graph.RoomGraph;
 import io.github.simonreilich.graph.RoomNode;
