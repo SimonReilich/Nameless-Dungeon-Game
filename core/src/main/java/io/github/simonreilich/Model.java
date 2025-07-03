@@ -91,6 +91,7 @@ public class Model {
     public void restart() {
         view.create();
         endView.dispose();
+        ((StartView) view.getScreen()).time = ((StartView) view.getScreen()).animationEnd;
     }
 
 }

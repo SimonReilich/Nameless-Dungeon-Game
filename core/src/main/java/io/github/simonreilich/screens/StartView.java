@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import io.github.simonreilich.Model;
@@ -28,9 +27,9 @@ public class StartView implements Screen {
     private final float libLogoFadeOutEnd = 2.0f;
 
     private final float gameLogoFadeInStart = 2.5f;
-    private final float gameLogoFadeInEnd = 3.0f;
+    public final float animationEnd = 3.0f;
 
-    private float time;
+    public float time;
 
     private Div div;
 
@@ -90,12 +89,12 @@ public class StartView implements Screen {
             batch.begin();
             batch.draw(lib, lib.getX(), lib.getY(), lib.getWidth(), lib.getHeight());
             batch.end();
-        } else if (gameLogoFadeInStart < time && time < gameLogoFadeInEnd) {
-            batch.setColor(c.r, c.g, c.b, (time - gameLogoFadeInStart) / (gameLogoFadeInEnd - gameLogoFadeInStart));
+        } else if (gameLogoFadeInStart < time && time < animationEnd) {
+            batch.setColor(c.r, c.g, c.b, (time - gameLogoFadeInStart) / (animationEnd - gameLogoFadeInStart));
             batch.begin();
             batch.draw(title, title.getX(), title.getY(), title.getWidth(), title.getHeight());
             batch.end();
-        } else if (gameLogoFadeInEnd < time) {
+        } else if (animationEnd < time) {
             batch.setColor(c.r, c.g, c.b, 1.0f);
             batch.begin();
             batch.draw(title, title.getX(), title.getY(), title.getWidth(), title.getHeight());
