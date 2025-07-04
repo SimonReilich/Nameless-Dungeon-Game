@@ -79,21 +79,29 @@ public class Div implements UiElement{
 
     private void drawTopLeft(SpriteBatch batch, float x, float y) {
         float offset = height - children[0].getHeight() - MARGIN;
-        children[0].draw(batch, x + MARGIN, y + offset);
+        children[0].setX(x + MARGIN);
+        children[0].setY(y + offset);
+        children[0].draw(batch);
         for (int i = 1; i < children.length; i++) {
             offset -= children[i - 1].getHeight();
             offset -= MARGIN;
-            children[i].draw(batch, x + MARGIN, y + offset);
+            children[i].setX(x + MARGIN);
+            children[i].setY(y + offset);
+            children[i].draw(batch);
         }
     }
 
     private void drawTopRight(SpriteBatch batch, float x, float y) {
         float offset = height - children[0].getHeight() - MARGIN;
-        children[0].draw(batch, x + width - children[0].getWidth() - MARGIN, y + offset);
+        children[0].setX(x + width - children[0].getWidth() - MARGIN);
+        children[0].setY(y + offset);
+        children[0].draw(batch);
         for (int i = 1; i < children.length; i++) {
             offset -= children[i - 1].getHeight();
             offset -= MARGIN;
-            children[i].draw(batch, x + width - children[i].getWidth() - MARGIN, y + offset);
+            children[i].setX(x + width - children[i].getWidth() - MARGIN);
+            children[i].setY(y + offset);
+            children[i].draw(batch);
         }
     }
 

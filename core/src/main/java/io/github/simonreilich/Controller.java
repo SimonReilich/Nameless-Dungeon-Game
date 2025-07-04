@@ -25,8 +25,6 @@ public class Controller extends InputAdapter {
                 return map(keycode);
             case Menu:
                 return menu(keycode);
-            case End:
-                return end(keycode);
         }
         return super.keyDown(keycode);
     }
@@ -68,8 +66,8 @@ public class Controller extends InputAdapter {
                 model.skip();
                 break;
             case Input.Keys.ESCAPE:
-                model.nextView();
-                screen = Screen.End;
+                model.restart();
+                screen = Screen.Start;
                 break;
         }
         return super.keyDown(keycode);
@@ -78,19 +76,6 @@ public class Controller extends InputAdapter {
     private boolean menu(int keycode) {
         switch (keycode) {
 
-        }
-        return super.keyDown(keycode);
-    }
-
-    private boolean end(int keycode) {
-        switch (keycode) {
-            case Input.Keys.SPACE:
-                model.restart();
-                screen = Screen.Start;
-                break;
-            case Input.Keys.ESCAPE:
-                model.nextView();
-                break;
         }
         return super.keyDown(keycode);
     }
@@ -105,10 +90,6 @@ public class Controller extends InputAdapter {
 
     public void setMenu() {
         screen = Screen.Menu;
-    }
-
-    public void setEnd() {
-        screen = Screen.End;
     }
 
 }

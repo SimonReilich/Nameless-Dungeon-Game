@@ -2,6 +2,7 @@ package io.github.simonreilich.ui;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import io.github.simonreilich.Consts;
 
 public abstract class Button implements UiElement {
 
@@ -19,14 +20,13 @@ public abstract class Button implements UiElement {
         this.y = y;
         this.width = width;
         font.getData().setScale((float) size / 30);
-        font.setColor(1, 1, 1, 1);
+        font.setColor(Consts.textColor);
         this.text = text;
     }
 
     public abstract void clicked();
 
     public void update(int mouseX, int mouseY) {
-        System.out.println("Mouse X: " + mouseX + " Mouse Y: " + mouseY + " X: " + x * size + " Y: " + y * size);
         if (x * size < mouseX && mouseX < (x + width) * size
         && y * size < mouseY && mouseY < (y + 1) * size) {
             clicked();

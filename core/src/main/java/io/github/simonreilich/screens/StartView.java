@@ -14,6 +14,10 @@ import io.github.simonreilich.ui.Div;
 import io.github.simonreilich.ui.UiElement;
 import io.github.simonreilich.util.Align;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+
 public class StartView implements Screen {
 
     private Batch batch;
@@ -35,6 +39,9 @@ public class StartView implements Screen {
 
     private Model model;
 
+    private Sprite[] heroSkins;
+    private int selectedHero;
+
     @Override
     public void show() {
 
@@ -47,11 +54,22 @@ public class StartView implements Screen {
 
         time = 0.0f;
 
-        div  = new Div(0, 0, (float) Gdx.graphics.getWidth() / UiElement.size, (float) Gdx.graphics.getHeight() / UiElement.size / 2, Align.TOP,
+        div  = new Div(0, 0, (float) Gdx.graphics.getWidth() / (UiElement.size * 2), (float) Gdx.graphics.getHeight() / UiElement.size / 2, Align.TOP_RIGHT,
             new Button(0, 0, 5, "Play") {
                 @Override
                 public void clicked() {
-                    model.nextView();
+                    model.startGame(heroSkins[selectedHero].getTexture());
+                    for (int i = 0; i < heroSkins.length; i++) {
+                        if (i != selectedHero) {
+                            heroSkins[i].getTexture().dispose();
+                        }
+                    }
+                }
+            },
+            new Button(0, 0, 5, "Change Skin") {
+                @Override
+                public void clicked() {
+                    selectedHero = (selectedHero + 1) % heroSkins.length;
                 }
             },
             new Button(0, 0, 5, "Close") {
@@ -60,10 +78,29 @@ public class StartView implements Screen {
                     Gdx.app.exit();
                 }
             });
+
+        initHeroSkins();
     }
 
     public void setModel(Model model) {
         this.model = model;
+    }
+
+    private void initHeroSkins() {
+        try {
+            BufferedReader r = new BufferedReader(new FileReader("assets/assets.txt"));
+            String[] sources = r.lines().filter(s -> s.startsWith("sprites/heros/") && s.endsWith(".png")).toArray(String[]::new);
+            heroSkins = new Sprite[sources.length];
+            selectedHero = 0;
+            for (int i = 0; i < sources.length; i++) {
+                heroSkins[i] = new Sprite(new Texture(sources[i]));
+                if (sources[i].endsWith("basic.png")) {
+                    selectedHero = i;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -101,6 +138,10 @@ public class StartView implements Screen {
             batch.end();
 
             div.draw((SpriteBatch) batch);
+
+            batch.begin();
+            batch.draw(heroSkins[selectedHero], (float) Gdx.graphics.getWidth() / 2, (float) Gdx.graphics.getHeight() / 2 - heroSkins[selectedHero].getHeight() * 10, heroSkins[selectedHero].getWidth() * 10, heroSkins[selectedHero].getHeight() * 10);
+            batch.end();
         }
     }
 

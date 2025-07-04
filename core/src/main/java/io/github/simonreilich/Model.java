@@ -1,10 +1,10 @@
 package io.github.simonreilich;
 
 import com.badlogic.gdx.Gdx;
-import io.github.simonreilich.screens.EndView;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import io.github.simonreilich.screens.MapView;
 import io.github.simonreilich.screens.StartView;
-import io.github.simonreilich.util.UpdateType;
 
 public class Model {
 
@@ -12,7 +12,7 @@ public class Model {
     private final Controller controller;
     private final StartView startView;
     private final MapView mapView;
-    private final EndView endView;
+    private Sprite playerSkin;
 
     public Model(View view) {
         this.view = view;
@@ -20,17 +20,9 @@ public class Model {
         Gdx.input.setInputProcessor(controller);
         this.startView = new StartView();
         this.mapView = new MapView();
-        this.endView = new EndView();
         this.startView.setModel(this);
         this.mapView.setModel(this);
         this.view.setScreen(startView);
-    }
-
-    public void update(UpdateType type) {
-        switch (type) {
-            case Exit:
-                nextView();
-        }
     }
 
     public void up() {
@@ -59,29 +51,13 @@ public class Model {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } finally {
-            this.view.setScreen(endView);
             mapView.dispose();
+            restart();
         }
     }
 
     public void clicked(int mouseX, int mouseY) {
         startView.click(mouseX, mouseY);
-    }
-
-    public void nextView() {
-        if (this.view.getScreen() == startView) {
-            this.view.setScreen(mapView);
-            controller.setMap();
-        } else if (this.view.getScreen() == mapView) {
-            this.view.setScreen(endView);
-            controller.setEnd();
-        } else {
-            startView.dispose();
-            mapView.dispose();
-            endView.dispose();
-            view.dispose();
-            Gdx.app.exit();
-        }
     }
 
     public void toggleAttack() {
@@ -90,8 +66,13 @@ public class Model {
 
     public void restart() {
         view.create();
-        endView.dispose();
         ((StartView) view.getScreen()).time = ((StartView) view.getScreen()).animationEnd;
+    }
+
+    public void startGame(Texture heroSkin) {
+        controller.setMap();
+        view.setScreen(mapView);
+        mapView.setHeroSkin(heroSkin);
     }
 
 }

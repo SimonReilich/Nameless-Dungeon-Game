@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -331,5 +332,12 @@ public class MapView implements Screen, DrawQueue {
 
     public boolean free(int x, int y) {
         return !occupied(x, y) && inBounds(x, y) && getItemsPos(x, y).isEmpty();
+    }
+
+    public void setHeroSkin(Texture heroSkin) {
+        hero.set(new Sprite(heroSkin));
+
+        hero.setPosX((Integer) mapNode.map.getLayers().get(0).getProperties().get("spawnX1"));
+        hero.setPosY((Integer) mapNode.map.getLayers().get(0).getProperties().get("spawnY1"));
     }
 }
