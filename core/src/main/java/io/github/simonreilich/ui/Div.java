@@ -1,6 +1,7 @@
 package io.github.simonreilich.ui;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import io.github.simonreilich.util.Align;
 
 public class Div implements UiElement{
@@ -12,7 +13,7 @@ public class Div implements UiElement{
     private final UiElement[] children;
     private static final float MARGIN = 0.5f;
 
-    public Div(int x, int y, float width, float height, Align align, Button... children) {
+    public Div(float x, float y, float width, float height, Align align, Button... children) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -21,9 +22,9 @@ public class Div implements UiElement{
         this.children = children;
     }
 
-    public void update(int mouseX, int mouseY) {
+    public void update(Vector2 mouse) {
         for (UiElement child : children) {
-            child.update(mouseX, mouseY);
+            child.update(mouse);
         }
     }
 

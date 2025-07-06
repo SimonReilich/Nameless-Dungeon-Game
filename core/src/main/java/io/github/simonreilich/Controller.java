@@ -3,6 +3,7 @@ package io.github.simonreilich;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.math.Vector2;
 import io.github.simonreilich.util.Screen;
 
 public class Controller extends InputAdapter {
@@ -33,7 +34,7 @@ public class Controller extends InputAdapter {
         // ignore if its not left mouse button or first touch pointer
         if (button != Input.Buttons.LEFT || pointer > 0) return false;
         if (screen == Screen.Start) {
-            model.clicked(screenX, Gdx.graphics.getHeight() - screenY);
+            model.clicked(new Vector2(screenX, screenY));
         }
         return true;
     }

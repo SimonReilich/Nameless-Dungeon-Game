@@ -3,6 +3,7 @@ package io.github.simonreilich;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import io.github.simonreilich.screens.MapView;
 import io.github.simonreilich.screens.StartView;
 
@@ -56,8 +57,8 @@ public class Model {
         }
     }
 
-    public void clicked(int mouseX, int mouseY) {
-        startView.click(mouseX, mouseY);
+    public void clicked(Vector2 mouse) {
+        startView.click(mouse);
     }
 
     public void toggleAttack() {

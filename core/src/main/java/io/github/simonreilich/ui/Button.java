@@ -1,7 +1,9 @@
 package io.github.simonreilich.ui;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import io.github.simonreilich.Consts;
 
 public abstract class Button implements UiElement {
@@ -11,24 +13,22 @@ public abstract class Button implements UiElement {
     public static final Texture left   = new Texture("interface/left.png");
     public static final Texture right  = new Texture("interface/right.png");
     public static final Texture middle = new Texture("interface/middle.png");
+    public final Sprite text;
 
-    public String text;
 
-
-    public Button(int x, int y, int width, String text) {
+    public Button(float x, float y, int width, String text) {
         this.x = x;
         this.y = y;
         this.width = width;
-        font.getData().setScale((float) size / 30);
-        font.setColor(Consts.textColor);
-        this.text = text;
+        this.text = new Sprite(new Texture("interface/text/" + text + ".png"));
+        this.text.scale(1.0f);
     }
 
     public abstract void clicked();
 
-    public void update(int mouseX, int mouseY) {
-        if (x * size < mouseX && mouseX < (x + width) * size
-        && y * size < mouseY && mouseY < (y + 1) * size) {
+    public void update(Vector2 mouse) {
+        if (x * size < mouse.x && mouse.x < (x + width) * size
+        && y * size < mouse.y && mouse.y < (y + 1) * size) {
             clicked();
         }
     }
@@ -52,8 +52,9 @@ public abstract class Button implements UiElement {
         batch.draw(right, (x + width - 1) * size, y * size, size, size);
         batch.end();
 
+        text.setCenter(x * size + 0.5f * size * width, y * size + 0.5f * size);
         batch.begin();
-        font.draw(batch, text, x * size + (size - font.getCapHeight()) / 2.2f, ((y + 1) * size) - (size - font.getCapHeight()) / 2.2f);
+        text.draw(batch);
         batch.end();
     }
 
