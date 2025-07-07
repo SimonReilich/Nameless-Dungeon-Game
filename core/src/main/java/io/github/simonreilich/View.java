@@ -2,11 +2,9 @@ package io.github.simonreilich;
 
 public class View extends com.badlogic.gdx.Game {
 
-    private Model model;
-
     @Override
     public void create() {
-        model = new Model(this);
+        new Model(this);
     }
 
     @Override

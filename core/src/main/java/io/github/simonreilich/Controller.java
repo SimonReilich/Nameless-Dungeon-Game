@@ -1,97 +1,68 @@
 package io.github.simonreilich;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector2;
-import io.github.simonreilich.util.Screen;
 
 public class Controller extends InputAdapter {
 
-    private Model model;
-    private Screen screen;
+    private final Model model;
+    private boolean map;
 
     public Controller(Model model) {
         super();
         this.model = model;
-        this.screen = Screen.Start;
+        this.map = false;
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        switch (screen) {
-            case Start:
-                return start(keycode);
-            case Map:
-                return map(keycode);
-            case Menu:
-                return menu(keycode);
-        }
+        if (this.map) return mapInput(keycode);
         return super.keyDown(keycode);
     }
 
-    @Override public boolean touchDown (int screenX, int screenY, int pointer, int button) {
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         // ignore if its not left mouse button or first touch pointer
         if (button != Input.Buttons.LEFT || pointer > 0) return false;
-        if (screen == Screen.Start) {
-            model.clicked(new Vector2(screenX, screenY));
-        }
+        this.model.clicked(new Vector2(screenX, screenY));
         return true;
     }
 
-    private boolean start(int keycode) {
-        switch (keycode) {
-
-        }
-        return super.keyDown(keycode);
-    }
-
-    private boolean map(int keycode) {
+    private boolean mapInput(int keycode) {
         switch (keycode) {
             case Input.Keys.W:
-                model.up();
+                this.model.up();
                 break;
             case Input.Keys.A:
-                model.left();
+                this.model.left();
                 break;
             case Input.Keys.S:
-                model.down();
+                this.model.down();
                 break;
             case Input.Keys.D:
-                model.right();
+                this.model.right();
                 break;
             case Input.Keys.Q:
-                model.toggleAttack();
+                this.model.toggleAttack();
                 break;
             case Input.Keys.SPACE:
-                model.skip();
+                this.model.skip();
                 break;
             case Input.Keys.ESCAPE:
-                model.restart();
-                screen = Screen.Start;
+                this.model.restart();
+                this.map = false;
                 break;
         }
         return super.keyDown(keycode);
-    }
-
-    private boolean menu(int keycode) {
-        switch (keycode) {
-
-        }
-        return super.keyDown(keycode);
-    }
-
-    public void setStart() {
-        screen = Screen.Start;
     }
 
     public void setMap() {
-        screen = Screen.Map;
+        this.map = true;
     }
 
     public void setMenu() {
-        screen = Screen.Menu;
+        this.map = false;
     }
-
 }
 

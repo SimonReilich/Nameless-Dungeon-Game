@@ -3,7 +3,7 @@ package io.github.simonreilich.graph;
 import io.github.simonreilich.objects.Drawable;
 import io.github.simonreilich.objects.Entities.enemies.Enemy;
 import io.github.simonreilich.objects.Items.Coin;
-import io.github.simonreilich.screens.MapView;
+import io.github.simonreilich.screens.MapScreen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,17 +43,17 @@ public class RoomNode {
         neighbors.set(i, neighbor);
     }
 
-    public void initDrawables(MapView mapView) {
+    public void initDrawables(MapScreen mapScreen) {
         if (drawables == null) {
             drawables = new ArrayList<>();
 
             for (int x = 0; x < 30; x++) {
                 for (int y = 0; y < 20; y++) {
                     if (this.map.getMapProperties(x, y).containsKey("spawn")) {
-                        drawables.add(Enemy.spawn(this.map.getMapProperties(x, y).get("spawn", Integer.class), x, y, mapView, this));
+                        drawables.add(Enemy.spawn(this.map.getMapProperties(x, y).get("spawn", Integer.class), x, y, mapScreen, this));
                     }
                     if (this.map.getMapProperties(x, y).containsKey("item")) {
-                        drawables.add(new Coin(x, y, mapView, this));
+                        drawables.add(new Coin(x, y, mapScreen, this));
                     }
                 }
             }

@@ -3,36 +3,28 @@ package io.github.simonreilich.ui;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import io.github.simonreilich.util.Align;
+import io.github.simonreilich.util.Consts;
 
-public class Div implements UiElement{
+public class Div implements UiElement {
 
-    private float x, y;
-    private final float width, height;
-
+    private final Vector2 dim;
     private final Align align;
     private final UiElement[] children;
-    private static final float MARGIN = 0.5f;
+    private final Vector2 pos;
 
     public Div(float x, float y, float width, float height, Align align, Button... children) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+        this.pos = new Vector2(x, y);
+        this.dim = new Vector2(width, height);
         this.align = align;
         this.children = children;
     }
 
-    public void update(Vector2 mouse) {
-        for (UiElement child : children) {
-            child.update(mouse);
-        }
-    }
-
     public void draw(SpriteBatch batch) {
-        draw(batch, x, y);
+        draw(batch, pos.x, pos.y);
     }
 
     public void draw(SpriteBatch batch, float x, float y) {
+        // determines the layout and calls the corresponding draw-method
         switch (align) {
             case TOP:
                 drawTop(batch, x, y);
@@ -65,132 +57,139 @@ public class Div implements UiElement{
     }
 
     private void drawTop(SpriteBatch batch, float x, float y) {
-        float offset = height - children[0].getHeight() - MARGIN;
-        children[0].setX(x + (width - children[0].getWidth()) / 2);
+        float offset = dim.y - children[0].getHeight() - Consts.margin;
+        children[0].setX(x + (dim.x - children[0].getWidth()) / 2);
         children[0].setY(y + offset);
         children[0].draw(batch);
         for (int i = 1; i < children.length; i++) {
             offset -= children[i - 1].getHeight();
-            offset -= MARGIN;
-            children[i].setX(x + (width - children[i].getWidth()) / 2);
+            offset -= Consts.margin;
+            children[i].setX(x + (dim.x - children[i].getWidth()) / 2);
             children[i].setY(y + offset);
             children[i].draw(batch);
         }
     }
 
     private void drawTopLeft(SpriteBatch batch, float x, float y) {
-        float offset = height - children[0].getHeight() - MARGIN;
-        children[0].setX(x + MARGIN);
+        float offset = dim.y - children[0].getHeight() - Consts.margin;
+        children[0].setX(x + Consts.margin);
         children[0].setY(y + offset);
         children[0].draw(batch);
         for (int i = 1; i < children.length; i++) {
             offset -= children[i - 1].getHeight();
-            offset -= MARGIN;
-            children[i].setX(x + MARGIN);
+            offset -= Consts.margin;
+            children[i].setX(x + Consts.margin);
             children[i].setY(y + offset);
             children[i].draw(batch);
         }
     }
 
     private void drawTopRight(SpriteBatch batch, float x, float y) {
-        float offset = height - children[0].getHeight() - MARGIN;
-        children[0].setX(x + width - children[0].getWidth() - MARGIN);
+        float offset = dim.y - children[0].getHeight() - Consts.margin;
+        children[0].setX(x + dim.x - children[0].getWidth() - Consts.margin);
         children[0].setY(y + offset);
         children[0].draw(batch);
         for (int i = 1; i < children.length; i++) {
             offset -= children[i - 1].getHeight();
-            offset -= MARGIN;
-            children[i].setX(x + width - children[i].getWidth() - MARGIN);
+            offset -= Consts.margin;
+            children[i].setX(x + dim.x - children[i].getWidth() - Consts.margin);
             children[i].setY(y + offset);
             children[i].draw(batch);
         }
     }
 
     private void drawBottom(SpriteBatch batch, float x, float y) {
-        float offset = MARGIN;
-        children[0].draw(batch, x + (float) (width - children[0].getWidth()) / 2, y + offset);
+        float offset = Consts.margin;
+        children[0].draw(batch, x + (dim.x - children[0].getWidth()) / 2, y + offset);
         for (int i = 1; i < children.length; i++) {
             offset += children[i - 1].getHeight();
-            offset += MARGIN;
-            children[i].draw(batch, x + (float) (width - children[i].getWidth()) / 2, y + offset);
+            offset += Consts.margin;
+            children[i].draw(batch, x + (dim.x - children[i].getWidth()) / 2, y + offset);
         }
     }
 
     private void drawBottomLeft(SpriteBatch batch, float x, float y) {
-        float offset = MARGIN;
-        children[0].draw(batch, x + MARGIN, y + offset);
+        float offset = Consts.margin;
+        children[0].draw(batch, x + Consts.margin, y + offset);
         for (int i = 1; i < children.length; i++) {
             offset += children[i - 1].getHeight();
-            offset += MARGIN;
-            children[i].draw(batch, x + MARGIN, y + offset);
+            offset += Consts.margin;
+            children[i].draw(batch, x + Consts.margin, y + offset);
         }
     }
 
     private void drawBottomRight(SpriteBatch batch, float x, float y) {
         float offset = 0;
-        children[0].draw(batch, x + width - children[0].getWidth() - MARGIN, y + offset);
+        children[0].draw(batch, x + dim.x - children[0].getWidth() - Consts.margin, y + offset);
         for (int i = 1; i < children.length; i++) {
             offset += children[i - 1].getHeight();
-            offset += MARGIN;
-            children[i].draw(batch, x + width - children[i].getWidth() - MARGIN, y + offset);
+            offset += Consts.margin;
+            children[i].draw(batch, x + dim.x - children[i].getWidth() - Consts.margin, y + offset);
         }
     }
 
     private void drawCenter(SpriteBatch batch, float x, float y) {
-        float effectiveHeight = (children.length - 1) * MARGIN;
+        float effectiveHeight = (children.length - 1) * Consts.margin;
         for (UiElement child : children) {
             effectiveHeight += child.getHeight();
         }
-        float offset = (height - effectiveHeight) / 2;
-        children[0].draw(batch, x + (float) (width - children[0].getWidth()) / 2, y + offset);
+        float offset = (dim.y - effectiveHeight) / 2;
+        children[0].draw(batch, x + (dim.x - children[0].getWidth()) / 2, y + offset);
         for (int i = 1; i < children.length; i++) {
             offset += children[i - 1].getHeight();
-            offset += MARGIN;
-            children[i].draw(batch, x + (float) (width - children[i].getWidth()) / 2, y + offset);
+            offset += Consts.margin;
+            children[i].draw(batch, x + (dim.x - children[i].getWidth()) / 2, y + offset);
         }
     }
 
     private void drawLeft(SpriteBatch batch, float x, float y) {
-        float effectiveHeight = (children.length - 1) * MARGIN;
+        float effectiveHeight = (children.length - 1) * Consts.margin;
         for (UiElement child : children) {
             effectiveHeight += child.getHeight();
         }
-        float offset = (height - effectiveHeight) / 2;
-        children[0].draw(batch, x + MARGIN, y + offset);
+        float offset = (dim.y - effectiveHeight) / 2;
+        children[0].draw(batch, x + Consts.margin, y + offset);
         for (int i = 1; i < children.length; i++) {
             offset += children[i - 1].getHeight();
-            offset += MARGIN;
-            children[i].draw(batch, x + MARGIN, y + offset);
+            offset += Consts.margin;
+            children[i].draw(batch, x + Consts.margin, y + offset);
         }
     }
 
     private void drawRight(SpriteBatch batch, float x, float y) {
-        float effectiveHeight = (children.length - 1) * MARGIN;
+        float effectiveHeight = (children.length - 1) * Consts.margin;
         for (UiElement child : children) {
             effectiveHeight += child.getHeight();
         }
-        float offset = (height - effectiveHeight) / 2;
-        children[0].draw(batch, x + width - children[0].getWidth() - MARGIN, y + offset);
+        float offset = (dim.y - effectiveHeight) / 2;
+        children[0].draw(batch, x + dim.x - children[0].getWidth() - Consts.margin, y + offset);
         for (int i = 1; i < children.length; i++) {
             offset += children[i - 1].getHeight();
-            offset += MARGIN;
-            children[i].draw(batch, x + width - children[i].getWidth() - MARGIN, y + offset);
+            offset += Consts.margin;
+            children[i].draw(batch, x + dim.x - children[i].getWidth() - Consts.margin, y + offset);
+        }
+    }
+
+    public void update(Vector2 mouse) {
+        // passes the coordinates of the click to every child-element
+        for (UiElement child : children) {
+            child.update(mouse);
         }
     }
 
     public float getWidth() {
-        return width;
+        return dim.x;
     }
 
     public float getHeight() {
-        return height;
+        return dim.y;
     }
 
     public void setX(float x) {
-        this.x = x;
+        this.pos.x = x;
     }
 
     public void setY(float y) {
-        this.y = y;
+        this.pos.y = y;
     }
 }

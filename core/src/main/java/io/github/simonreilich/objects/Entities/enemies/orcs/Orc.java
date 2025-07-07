@@ -2,15 +2,15 @@ package io.github.simonreilich.objects.Entities.enemies.orcs;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import io.github.simonreilich.Consts;
+import io.github.simonreilich.util.Consts;
 import io.github.simonreilich.graph.RoomNode;
 import io.github.simonreilich.objects.Entities.enemies.Enemy;
-import io.github.simonreilich.screens.MapView;
+import io.github.simonreilich.screens.MapScreen;
 
 public class Orc extends Enemy {
 
-    public Orc(int x, int y, MapView mapView, RoomNode room) {
-        super(new Sprite(new Texture("sprites/entities/orcs/variants/orc.png")), x, y, mapView, room);
+    public Orc(int x, int y, MapScreen mapScreen, RoomNode room) {
+        super(new Sprite(new Texture("sprites/entities/orcs/variants/orc.png")), x, y, mapScreen, room);
 
         double variant = Math.random();
         if (variant < 0.2) {
@@ -34,17 +34,17 @@ public class Orc extends Enemy {
 
     @Override
     public void move() {
-        int relPlayerX = mapView.hero.getDestinationX() - getPosX();
-        int relPlayerY = mapView.hero.getDestinationY() - getPosY();
+        int relPlayerX = (int) (mapScreen.getHeroDestination().x - getPosX());
+        int relPlayerY = (int) (mapScreen.getHeroDestination().y - getPosY());
         if (Math.sqrt(Math.pow(relPlayerX, 2) + Math.pow(relPlayerY, 2)) <= Consts.orcRange) {
             if (Math.abs(relPlayerX) > Math.abs(relPlayerY)) {
-                if (relPlayerX > 0 && mapView().free(getPosX() + 1, getPosY())) {
+                if (relPlayerX > 0 && mapScreen().free(getPosX() + 1, getPosY())) {
                     right(1);
-                } else if (relPlayerX < 0 && mapView().free(getPosX() - 1, getPosY())) {
+                } else if (relPlayerX < 0 && mapScreen().free(getPosX() - 1, getPosY())) {
                     left(1);
                 }
             } else if (Math.sqrt(Math.pow(relPlayerX, 2) + Math.pow(relPlayerY, 2)) <= Consts.orcRange) {
-                if (relPlayerY > 0 && mapView().free(getPosX(), getPosY() + 1)) {
+                if (relPlayerY > 0 && mapScreen().free(getPosX(), getPosY() + 1)) {
                     up(1);
                 } else {
                     down(1);
@@ -55,7 +55,7 @@ public class Orc extends Enemy {
 
     @Override
     public void harm() {
-        super.mapView().dequeue(this);
+        super.mapScreen().dequeue(this);
         super.room.removeDrawable(this);
         this.dispose();
     }

@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import io.github.simonreilich.graph.RoomNode;
 import io.github.simonreilich.objects.Drawable;
-import io.github.simonreilich.screens.MapView;
+import io.github.simonreilich.screens.MapScreen;
 
 public abstract class Item extends Sprite implements Drawable {
 
@@ -16,10 +16,10 @@ public abstract class Item extends Sprite implements Drawable {
 
     private final Texture shadow;
 
-    protected MapView mapView;
+    protected MapScreen mapScreen;
     protected RoomNode room;
 
-    public Item(Sprite sprite, int x, int y, MapView mapView, RoomNode room) {
+    public Item(Sprite sprite, int x, int y, MapScreen mapScreen, RoomNode room) {
         super(sprite);
         setPosX(x);
         setPosY(y);
@@ -28,7 +28,7 @@ public abstract class Item extends Sprite implements Drawable {
 
         shadow = new Texture("sprites/misc/shadow.png");
 
-        this.mapView = mapView;
+        this.mapScreen = mapScreen;
     }
 
     public void setPosX(int x) {

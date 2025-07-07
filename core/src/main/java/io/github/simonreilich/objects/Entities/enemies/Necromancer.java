@@ -3,12 +3,12 @@ package io.github.simonreilich.objects.Entities.enemies;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import io.github.simonreilich.graph.RoomNode;
-import io.github.simonreilich.screens.MapView;
+import io.github.simonreilich.screens.MapScreen;
 
 public class Necromancer extends Enemy {
 
-    public Necromancer(int x, int y, MapView mapView, RoomNode room) {
-        super(new Sprite(new Texture("sprites/entities/necromancer.png")), x, y, mapView, room);
+    public Necromancer(int x, int y, MapScreen mapScreen, RoomNode room) {
+        super(new Sprite(new Texture("sprites/entities/necromancer.png")), x, y, mapScreen, room);
     }
 
     @Override

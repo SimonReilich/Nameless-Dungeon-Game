@@ -10,78 +10,64 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import io.github.simonreilich.Model;
-import io.github.simonreilich.util.UpdateType;
 import io.github.simonreilich.graph.LazyMap;
-import io.github.simonreilich.graph.RoomGraph;
 import io.github.simonreilich.graph.RoomNode;
 import io.github.simonreilich.objects.Drawable;
-import io.github.simonreilich.objects.Entities.enemies.Enemy;
 import io.github.simonreilich.objects.Entities.Entity;
 import io.github.simonreilich.objects.Entities.Hero;
+import io.github.simonreilich.objects.Entities.enemies.Enemy;
 import io.github.simonreilich.objects.Items.Item;
+import io.github.simonreilich.util.Consts;
+import io.github.simonreilich.util.UpdateType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-public class MapView implements Screen, DrawQueue {
+public class MapScreen implements Screen, DrawQueue {
 
-    private Model model;
+    private Hero hero;
+    private int score;
     private Viewport viewport;
     private Batch batch;
     private List<Drawable> draw;
-    public Hero hero;
-
-    private RoomGraph roomGraph;
     private RoomNode mapNode;
     private OrthogonalTiledMapRenderer renderer;
-
     private boolean attack;
     private Texture attackTex;
-    public int score;
     private BitmapFont font;
-
-    private final int[] backgroundLayer = new int[]{4,5};
-    private final int[] foregroundLayer = new int[]{6};
-    private final int spawnLayer = 0;
-
-    public void setModel(Model model) {
-        this.model = model;
-    }
 
     @Override
     public void show() {
+        this.viewport = new FitViewport(30 * 32, 20 * 32);
+        this.batch = new SpriteBatch();
 
-        OrthographicCamera camera = new OrthographicCamera();
-        camera.position.set(32 * 15, 32 * 10, 0);
-        viewport = new FitViewport(30 * 32, 20 * 32);
-        batch = new SpriteBatch();
-
-        draw = new ArrayList<>();
+        this.draw = new ArrayList<>();
 
         this.hero = new Hero(this);
 
-        roomGraph = new RoomGraph();
         LazyMap lazyMap = new LazyMap();
-        renderer = new OrthogonalTiledMapRenderer(lazyMap.getMap());
-        mapNode = new RoomNode(lazyMap);
-        roomGraph.addRoom(mapNode);
+        this.renderer = new OrthogonalTiledMapRenderer(lazyMap.getMap());
+        this.mapNode = new RoomNode(lazyMap);
 
-        hero.setPosX((Integer) mapNode.map.getLayers().get(0).getProperties().get("spawnX1"));
-        hero.setPosY((Integer) mapNode.map.getLayers().get(0).getProperties().get("spawnY1"));
+        this.hero.setPosX((Integer) this.mapNode.map.getLayers().get(0).getProperties().get("spawnX1"));
+        this.hero.setPosY((Integer) this.mapNode.map.getLayers().get(0).getProperties().get("spawnY1"));
 
-        mapNode.initDrawables(this);
-        for (Drawable d : mapNode.getDrawables()) {
+        this.mapNode.initDrawables(this);
+        for (Drawable d : this.mapNode.getDrawables()) {
             this.enqueue(d);
         }
 
-        this.enqueue(hero);
+        this.enqueue(this.hero);
 
-        attack = false;
-        attackTex = new Texture("interface/attack.png");
-        score = 0;
-        font = new BitmapFont();
+        this.attack = false;
+        this.attackTex = new Texture("interface/attack.png");
+        this.score = 0;
+        this.font = new BitmapFont();
     }
 
     @Override
@@ -92,30 +78,30 @@ public class MapView implements Screen, DrawQueue {
         Gdx.gl.glClearColor(0.11f, 0.07f, 0.09f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        renderer.setView((OrthographicCamera) viewport.getCamera());
-        viewport.apply();
-        renderer.render(backgroundLayer);
+        this.renderer.setView((OrthographicCamera) this.viewport.getCamera());
+        this.viewport.apply();
+        this.renderer.render(Consts.backgroundLayer);
 
-        for (Drawable d : draw) {
-            d.draw((OrthographicCamera) viewport.getCamera(), batch, delta);
+        for (Drawable d : this.draw) {
+            d.draw((OrthographicCamera) this.viewport.getCamera(), this.batch, delta);
         }
 
-        renderer.render(foregroundLayer);
+        this.renderer.render(Consts.foregroundLayer);
 
-        if (attack) {
-            batch.begin();
-            batch.draw(attackTex, 0, 0);
-            batch.end();
+        if (this.attack) {
+            this.batch.begin();
+            this.batch.draw(this.attackTex, 0, 0);
+            this.batch.end();
         }
 
-        batch.begin();
-        font.draw(batch, Integer.toString(score), 32, 32);
-        batch.end();
+        this.batch.begin();
+        this.font.draw(this.batch, Integer.toString(this.score), 32, 32);
+        this.batch.end();
     }
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height, true);
+        this.viewport.update(width, height, true);
     }
 
     @Override
@@ -135,16 +121,16 @@ public class MapView implements Screen, DrawQueue {
 
     @Override
     public void dispose() {
-        batch.dispose();
-        mapNode.map.dispose();
-        renderer.dispose();
-        mapNode = null;
-        renderer = null;
+        this.batch.dispose();
+        this.mapNode.map.dispose();
+        this.renderer.dispose();
+        this.mapNode = null;
+        this.renderer = null;
     }
 
     public Set<Item> getItemsPos(int x, int y) {
         Set<Item> items = new HashSet<>();
-        for (Drawable d : draw) {
+        for (Drawable d : this.draw) {
             if (d instanceof Item && ((Item) d).getPosX() == x && ((Item) d).getPosY() == y) {
                 items.add((Item) d);
             }
@@ -154,7 +140,7 @@ public class MapView implements Screen, DrawQueue {
 
     public Set<Entity> getEntitiesPos(int x, int y) {
         Set<Entity> entities = new HashSet<>();
-        for (Drawable d : draw) {
+        for (Drawable d : this.draw) {
             if (d instanceof Entity && ((Entity) d).getPosX() == x && ((Entity) d).getPosY() == y) {
                 entities.add((Entity) d);
             }
@@ -164,7 +150,7 @@ public class MapView implements Screen, DrawQueue {
 
     public Set<Entity> getEntitiesAdj(int x, int y) {
         Set<Entity> entities = new HashSet<>();
-        for (Drawable d : draw) {
+        for (Drawable d : this.draw) {
             if (d instanceof Entity && ((Entity) d).getDestinationX() == x - 1 && ((Entity) d).getDestinationY() == y) {
                 entities.add((Entity) d);
             } else if (d instanceof Entity && ((Entity) d).getDestinationX() == x + 1 && ((Entity) d).getDestinationY() == y) {
@@ -180,7 +166,7 @@ public class MapView implements Screen, DrawQueue {
 
     public boolean inBounds(int x, int y) {
         if (mapNode == null) return false;
-        Object result = mapNode.map.getMapProperties(x, y).get("wakable");
+        Object result = this.mapNode.map.getMapProperties(x, y).get("wakable");
         if (result instanceof Boolean) {
             return (Boolean) result;
         } else {
@@ -189,62 +175,62 @@ public class MapView implements Screen, DrawQueue {
     }
 
     public boolean occupied(int x, int y) {
-        return draw.stream().anyMatch(d -> d instanceof Entity && ((Entity) d).getPosX() == x && ((Entity) d).getPosY() == y);
+        return this.draw.stream().anyMatch(d -> d instanceof Entity && ((Entity) d).getPosX() == x && ((Entity) d).getPosY() == y);
     }
 
     @Override
     public void enqueue(Drawable drawable) {
-        draw.add(drawable);
+        this.draw.add(drawable);
     }
 
     @Override
     public void dequeue(Drawable drawable) {
-        draw.remove(drawable);
+        this.draw.remove(drawable);
     }
 
     @Override
     public void dequeueAll() {
-        draw.clear();
+        this.draw.clear();
     }
 
     @Override
     public void dequeueAndDispose(Drawable drawable) {
         dequeue(drawable);
-        drawable.dispose();
+        if (drawable != this.hero) drawable.dispose();
     }
 
     @Override
     public void dequeueAndDisposeAll() {
-        for (Drawable d : draw) {
-            d.dispose();
+        for (Drawable d : this.draw) {
+            if (d != this.hero) d.dispose();
         }
-        draw.clear();
+        this.draw.clear();
     }
 
     @Override
     public void prioritize(Drawable drawable) {
-        draw.remove(drawable);
-        draw.add(drawable);
+        this.draw.remove(drawable);
+        this.draw.add(drawable);
     }
 
     @Override
     public void deprioritize(Drawable drawable) {
-        draw.remove(drawable);
-        draw.add(0, drawable);
+        this.draw.remove(drawable);
+        this.draw.add(0, drawable);
     }
 
     private void reloadMap(int index) {
-        renderer.setMap(mapNode.map.getMap());
+        this.renderer.setMap(mapNode.map.getMap());
         dequeueAll();
 
-        mapNode.initDrawables(this);
-        for (Drawable d : mapNode.getDrawables()) {
+        this.mapNode.initDrawables(this);
+        for (Drawable d : this.mapNode.getDrawables()) {
             this.enqueue(d);
         }
-        this.enqueue(hero);
+        this.enqueue(this.hero);
 
-        hero.setPosX((Integer) mapNode.map.getLayers().get(spawnLayer).getProperties().get("spawnX" + (index + 1)));
-        hero.setPosY((Integer) mapNode.map.getLayers().get(spawnLayer).getProperties().get("spawnY" + (index + 1)));
+        this.hero.setPosX((Integer) this.mapNode.map.getLayers().get(Consts.spawnLayer).getProperties().get("spawnX" + (index + 1)));
+        this.hero.setPosY((Integer) this.mapNode.map.getLayers().get(Consts.spawnLayer).getProperties().get("spawnY" + (index + 1)));
     }
 
     @Override
@@ -253,78 +239,78 @@ public class MapView implements Screen, DrawQueue {
         switch (type) {
             case PlayerMove:
                 // if the player steps on a door, the map changes
-                Object newMap = mapNode.map.getMapProperties(hero.getDestinationX(), hero.getDestinationY()).get("map");
+                Object newMap = this.mapNode.map.getMapProperties(this.hero.getDestinationX(), this.hero.getDestinationY()).get("map");
                 if (newMap instanceof Integer) {
-                    RoomNode oldRoom = mapNode;
-                    mapNode = mapNode.getNeighbor((Integer) newMap);
-                    mapNode.map.init();
-                    mapNode.setNeighbor(oldRoom, (Integer) newMap);
-                    renderer.setMap(mapNode.map.getMap());
+                    RoomNode oldRoom = this.mapNode;
+                    this.mapNode = this.mapNode.getNeighbor((Integer) newMap);
+                    this.mapNode.map.init();
+                    this.mapNode.setNeighbor(oldRoom, (Integer) newMap);
+                    this.renderer.setMap(mapNode.map.getMap());
                     reloadMap((Integer) newMap);
                 }
         }
 
         // Player interacts with all Entities, that are adjacent to him
-        for (Entity entity : getEntitiesAdj(hero.getDestinationX(), hero.getDestinationY())) {
-            hero.interact(entity);
+        for (Entity entity : getEntitiesAdj(this.hero.getDestinationX(), this.hero.getDestinationY())) {
+            this.hero.interact(entity);
         }
 
-        if (hero.alive) {
+        if (this.hero.alive) {
             // every entity gets updated
-            for (Drawable d : draw) {
+            for (Drawable d : this.draw) {
                 if (d instanceof Entity) {
                     ((Entity) d).update(type, delta);
                 }
             }
 
             // Player interacts with all Entities, that are adjacent to him
-            for (Entity entity : getEntitiesAdj(hero.getDestinationX(), hero.getDestinationY())) {
-                hero.interact(entity);
+            for (Entity entity : getEntitiesAdj(this.hero.getDestinationX(), this.hero.getDestinationY())) {
+                this.hero.interact(entity);
             }
 
             // Player picks up items
-            for (Item item : getItemsPos(hero.getDestinationX(), hero.getDestinationY())) {
+            for (Item item : getItemsPos(this.hero.getDestinationX(), this.hero.getDestinationY())) {
                 item.consume();
             }
         }
     }
 
     public void toggleAttack() {
-        attack = !attack;
+        if (hero.alive) this.attack = !this.attack;
     }
 
     public void up() {
-        hero.up();
-        attack = false;
+        this.hero.up();
+        this.attack = false;
     }
 
     public void left() {
-        hero.left();
-        attack = false;
+        this.hero.left();
+        this.attack = false;
     }
 
     public void right() {
-        hero.right();
-        attack = false;
+        this.hero.right();
+        this.attack = false;
     }
 
     public void down() {
-        hero.down();
-        attack = false;
+        this.hero.down();
+        this.attack = false;
     }
 
     public void skip() {
-        if (hero.alive) {
+        if (this.hero.alive) {
             updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
         }
     }
 
     public void attack() {
-        if (attack) {
-            getEntitiesAdj(hero.getDestinationX(), hero.getDestinationY()).forEach(entity -> {
+        if (this.attack) {
+            getEntitiesAdj(this.hero.getDestinationX(), this.hero.getDestinationY()).forEach(entity -> {
                 if (entity instanceof Enemy) {
                     entity.update(UpdateType.PlayerAttack, 0.0f);
-                    score++;
+                    this.score++;
                 }
             });
         }
@@ -335,9 +321,17 @@ public class MapView implements Screen, DrawQueue {
     }
 
     public void setHeroSkin(Texture heroSkin) {
-        hero.set(new Sprite(heroSkin));
+        this.hero.set(new Sprite(heroSkin));
 
-        hero.setPosX((Integer) mapNode.map.getLayers().get(0).getProperties().get("spawnX1"));
-        hero.setPosY((Integer) mapNode.map.getLayers().get(0).getProperties().get("spawnY1"));
+        this.hero.setPosX((Integer) this.mapNode.map.getLayers().get(0).getProperties().get("spawnX1"));
+        this.hero.setPosY((Integer) this.mapNode.map.getLayers().get(0).getProperties().get("spawnY1"));
+    }
+
+    public void addPoints(int score) {
+        this.score += score;
+    }
+
+    public Vector2 getHeroDestination() {
+        return new Vector2(this.hero.getDestinationX(), this.hero.getDestinationY());
     }
 }
