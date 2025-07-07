@@ -3,8 +3,13 @@ package io.github.simonreilich.objects.Entities.enemies;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
-import io.github.simonreilich.graph.RoomNode;
+import io.github.simonreilich.rooms.RoomNode;
 import io.github.simonreilich.screens.MapScreen;
+import io.github.simonreilich.util.PrioQueue;
+
+import java.util.HashSet;
+import java.util.PriorityQueue;
+import java.util.Set;
 
 public class DarkKnight extends Enemy {
 
@@ -14,9 +19,51 @@ public class DarkKnight extends Enemy {
 
     @Override
     public void move() {
-        Vector2 player = super.mapScreen().getHeroDestination();
+        // DarkKnight will chase the player, using A* for pathfinding
+        Vector2 heroPos = mapScreen.getHeroDestination();
+        pathfinding(heroPos);
+    }
 
-        // A* Algorithm
+    private void pathfinding(Vector2 heroPos) {
+        PrioQueue openList = new PrioQueue();
+        Set<Vector2> closedList = new HashSet<>();
+
+        openList.enqueue(new Vector2(getPosX(), getPosY()), 0);
+
+        while (!openList.isEmpty()) {
+            Vector2 current = openList.removeMin();
+            if (current.x == heroPos.x && current.y == heroPos.y) {
+                System.out.println("Path found");
+                return;
+            }
+            closedList.add(current);
+            expandNode(current, openList, closedList);
+        }
+        System.out.println("No Path found");
+    }
+
+    private void expandNode(Vector2 current, PrioQueue openList, Set<Vector2> closedList) {
+        Vector2 suc;
+        // top
+        suc = new Vector2(current.x, current.y + 1);
+        if (mapScreen().inBounds((int) suc.x, (int) suc.y) && !closedList.contains(suc)) {
+
+        }
+        // right
+        suc = new Vector2(current.x + 1, current.y);
+        if (mapScreen().inBounds((int) suc.x, (int) suc.y) && !closedList.contains(suc)) {
+
+        }
+        // bottom
+        suc = new Vector2(current.x, current.y - 1);
+        if (mapScreen().inBounds((int) suc.x, (int) suc.y) && !closedList.contains(suc)) {
+
+        }
+        // left
+        suc = new Vector2(current.x - 1, current.y);
+        if (mapScreen().inBounds((int) suc.x, (int) suc.y) && !closedList.contains(suc)) {
+
+        }
     }
 
     @Override

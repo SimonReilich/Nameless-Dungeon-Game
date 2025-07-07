@@ -1,4 +1,4 @@
-package io.github.simonreilich.graph;
+package io.github.simonreilich.rooms;
 
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.MapProperties;

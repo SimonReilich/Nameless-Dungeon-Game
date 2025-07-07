@@ -5,7 +5,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import io.github.simonreilich.graph.RoomNode;
+import io.github.simonreilich.objects.Entities.enemies.elements.Gold;
+import io.github.simonreilich.rooms.RoomNode;
 import io.github.simonreilich.objects.Drawable;
 import io.github.simonreilich.screens.MapScreen;
 
@@ -29,6 +30,21 @@ public abstract class Item extends Sprite implements Drawable {
         shadow = new Texture("sprites/misc/shadow.png");
 
         this.mapScreen = mapScreen;
+    }
+
+    public static Item spawn(int spawnID, int x, int y, MapScreen mapScreen, RoomNode room) {
+        switch (spawnID) {
+            case 0:
+                return new Coin(x, y, mapScreen, room);
+            case 1:
+                return new SilverTreasure(x, y, mapScreen, room);
+            case 2:
+                return new GoldTreasure(x, y, mapScreen, room);
+            case 3:
+                return new SpeedPotion(x, y, mapScreen, room);
+            default:
+                return spawn((int) (Math.random() * 4), x, y, mapScreen, room);
+        }
     }
 
     public void setPosX(int x) {

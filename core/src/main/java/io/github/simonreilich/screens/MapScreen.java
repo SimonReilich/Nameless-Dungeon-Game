@@ -2,19 +2,18 @@ package io.github.simonreilich.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import io.github.simonreilich.graph.LazyMap;
-import io.github.simonreilich.graph.RoomNode;
+import io.github.simonreilich.rooms.LazyMap;
+import io.github.simonreilich.rooms.RoomNode;
 import io.github.simonreilich.objects.Drawable;
 import io.github.simonreilich.objects.Entities.Entity;
 import io.github.simonreilich.objects.Entities.Hero;
@@ -35,39 +34,40 @@ public class MapScreen implements Screen, DrawQueue {
     private Viewport viewport;
     private Batch batch;
     private List<Drawable> draw;
-    private RoomNode mapNode;
+    private RoomNode roomNode;
     private OrthogonalTiledMapRenderer renderer;
     private boolean attack;
     private Texture attackTex;
-    private BitmapFont font;
+
+    private static final BitmapFont font = new BitmapFont();
+    private static final GlyphLayout glyphLayout = new GlyphLayout();
 
     @Override
     public void show() {
         this.viewport = new FitViewport(30 * 32, 20 * 32);
         this.batch = new SpriteBatch();
-
         this.draw = new ArrayList<>();
 
         this.hero = new Hero(this);
 
         LazyMap lazyMap = new LazyMap();
         this.renderer = new OrthogonalTiledMapRenderer(lazyMap.getMap());
-        this.mapNode = new RoomNode(lazyMap);
+        this.roomNode = new RoomNode(lazyMap);
 
-        this.hero.setPosX((Integer) this.mapNode.map.getLayers().get(0).getProperties().get("spawnX1"));
-        this.hero.setPosY((Integer) this.mapNode.map.getLayers().get(0).getProperties().get("spawnY1"));
+        // setting the players spawn location
+        this.hero.setPosX((Integer) this.roomNode.map.getLayers().get(0).getProperties().get("spawnX1"));
+        this.hero.setPosY((Integer) this.roomNode.map.getLayers().get(0).getProperties().get("spawnY1"));
 
-        this.mapNode.initDrawables(this);
-        for (Drawable d : this.mapNode.getDrawables()) {
+        // add all drawables to the list
+        this.roomNode.initDrawables(this);
+        for (Drawable d : this.roomNode.getDrawables()) {
             this.enqueue(d);
         }
-
         this.enqueue(this.hero);
 
         this.attack = false;
         this.attackTex = new Texture("interface/attack.png");
         this.score = 0;
-        this.font = new BitmapFont();
     }
 
     @Override
@@ -90,12 +90,20 @@ public class MapScreen implements Screen, DrawQueue {
 
         if (this.attack) {
             this.batch.begin();
-            this.batch.draw(this.attackTex, 0, 0);
+            this.batch.draw(this.attackTex, 29 * 32, 0);
             this.batch.end();
         }
 
         this.batch.begin();
-        this.font.draw(this.batch, Integer.toString(this.score), 32, 32);
+        glyphLayout.setText(font, Integer.toString(this.score), Color.WHITE, 32, Align.center, true);
+        font.draw(
+            this.batch,
+            Integer.toString(this.score),
+            0,
+            0 + 32 / 2f + glyphLayout.height / 2f,
+            32,
+            Align.center,
+            true);
         this.batch.end();
     }
 
@@ -122,9 +130,9 @@ public class MapScreen implements Screen, DrawQueue {
     @Override
     public void dispose() {
         this.batch.dispose();
-        this.mapNode.map.dispose();
+        this.roomNode.map.dispose();
         this.renderer.dispose();
-        this.mapNode = null;
+        this.roomNode = null;
         this.renderer = null;
     }
 
@@ -165,8 +173,8 @@ public class MapScreen implements Screen, DrawQueue {
     }
 
     public boolean inBounds(int x, int y) {
-        if (mapNode == null) return false;
-        Object result = this.mapNode.map.getMapProperties(x, y).get("wakable");
+        if (roomNode == null) return false;
+        Object result = this.roomNode.map.getMapProperties(x, y).get("wakable");
         if (result instanceof Boolean) {
             return (Boolean) result;
         } else {
@@ -220,17 +228,17 @@ public class MapScreen implements Screen, DrawQueue {
     }
 
     private void reloadMap(int index) {
-        this.renderer.setMap(mapNode.map.getMap());
+        this.renderer.setMap(roomNode.map.getMap());
         dequeueAll();
 
-        this.mapNode.initDrawables(this);
-        for (Drawable d : this.mapNode.getDrawables()) {
+        this.roomNode.initDrawables(this);
+        for (Drawable d : this.roomNode.getDrawables()) {
             this.enqueue(d);
         }
         this.enqueue(this.hero);
 
-        this.hero.setPosX((Integer) this.mapNode.map.getLayers().get(Consts.spawnLayer).getProperties().get("spawnX" + (index + 1)));
-        this.hero.setPosY((Integer) this.mapNode.map.getLayers().get(Consts.spawnLayer).getProperties().get("spawnY" + (index + 1)));
+        this.hero.setPosX((Integer) this.roomNode.map.getLayers().get(Consts.spawnLayer).getProperties().get("spawnX" + (index + 1)));
+        this.hero.setPosY((Integer) this.roomNode.map.getLayers().get(Consts.spawnLayer).getProperties().get("spawnY" + (index + 1)));
     }
 
     @Override
@@ -239,13 +247,13 @@ public class MapScreen implements Screen, DrawQueue {
         switch (type) {
             case PlayerMove:
                 // if the player steps on a door, the map changes
-                Object newMap = this.mapNode.map.getMapProperties(this.hero.getDestinationX(), this.hero.getDestinationY()).get("map");
+                Object newMap = this.roomNode.map.getMapProperties(this.hero.getDestinationX(), this.hero.getDestinationY()).get("map");
                 if (newMap instanceof Integer) {
-                    RoomNode oldRoom = this.mapNode;
-                    this.mapNode = this.mapNode.getNeighbor((Integer) newMap);
-                    this.mapNode.map.init();
-                    this.mapNode.setNeighbor(oldRoom, (Integer) newMap);
-                    this.renderer.setMap(mapNode.map.getMap());
+                    RoomNode oldRoom = this.roomNode;
+                    this.roomNode = this.roomNode.getNeighbor((Integer) newMap);
+                    this.roomNode.map.init();
+                    this.roomNode.setNeighbor(oldRoom, (Integer) newMap);
+                    this.renderer.setMap(roomNode.map.getMap());
                     reloadMap((Integer) newMap);
                 }
         }
@@ -302,6 +310,7 @@ public class MapScreen implements Screen, DrawQueue {
     public void skip() {
         if (this.hero.alive) {
             updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
+            this.hero.decreaseSpeed();
         }
     }
 
@@ -323,8 +332,12 @@ public class MapScreen implements Screen, DrawQueue {
     public void setHeroSkin(Texture heroSkin) {
         this.hero.set(new Sprite(heroSkin));
 
-        this.hero.setPosX((Integer) this.mapNode.map.getLayers().get(0).getProperties().get("spawnX1"));
-        this.hero.setPosY((Integer) this.mapNode.map.getLayers().get(0).getProperties().get("spawnY1"));
+        this.hero.setPosX((Integer) this.roomNode.map.getLayers().get(0).getProperties().get("spawnX1"));
+        this.hero.setPosY((Integer) this.roomNode.map.getLayers().get(0).getProperties().get("spawnY1"));
+    }
+
+    public void increaseHeroSpeed() {
+        this.hero.increaseSpeed();
     }
 
     public void addPoints(int score) {

@@ -11,42 +11,56 @@ import io.github.simonreilich.objects.Entities.enemies.Enemy;
 public class Hero extends Entity implements Drawable {
 
     public boolean alive;
+    private int speed;
 
     public Hero(MapScreen view) {
         super(new Sprite(new Texture("sprites/heros/basic.png")), 15, 10, view);
         this.alive = true;
+        this.speed = 1;
     }
 
     public void up() {
-        if (mapScreen.inBounds(getPosX(), getPosY() + 1) && !mapScreen.occupied(getPosX(), getPosY() + 1) && destinationX == getX() && destinationY == getY() && alive) {
-            super.up(1);
+        if (mapScreen.inBounds(getPosX(), getPosY() + speed) && !mapScreen.occupied(getPosX(), getPosY() + speed) && destinationX == getX() && destinationY == getY() && alive) {
+            super.up(speed);
             mapScreen.attack();
+            speed = 1;
             mapScreen.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
         }
     }
 
     public void left() {
-        if (mapScreen.inBounds(getPosX() - 1, getPosY()) && !mapScreen.occupied(getPosX() - 1, getPosY()) && destinationX == getX() && destinationY == getY()  && alive) {
-            super.left(1);
+        if (mapScreen.inBounds(getPosX() - speed, getPosY()) && !mapScreen.occupied(getPosX() - speed, getPosY()) && destinationX == getX() && destinationY == getY()  && alive) {
+            super.left(speed);
             mapScreen.attack();
+            speed = 1;
             mapScreen.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
         }
     }
 
     public void down() {
-        if (mapScreen.inBounds(getPosX(), getPosY() - 1) && !mapScreen.occupied(getPosX(), getPosY() - 1) && destinationX == getX() && destinationY == getY() && alive) {
-            super.down(1);
+        if (mapScreen.inBounds(getPosX(), getPosY() - speed) && !mapScreen.occupied(getPosX(), getPosY() - speed) && destinationX == getX() && destinationY == getY() && alive) {
+            super.down(speed);
             mapScreen.attack();
+            speed = 1;
             mapScreen.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
         }
     }
 
     public void right() {
-        if (mapScreen.inBounds(getPosX() + 1, getPosY()) && !mapScreen.occupied(getPosX() + 1, getPosY()) && destinationX == getX() && destinationY == getY() && alive) {
-            super.right(1);
+        if (mapScreen.inBounds(getPosX() + speed, getPosY()) && !mapScreen.occupied(getPosX() + speed, getPosY()) && destinationX == getX() && destinationY == getY() && alive) {
+            super.right(speed);
             mapScreen.attack();
+            speed = 1;
             mapScreen.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
         }
+    }
+
+    public void increaseSpeed() {
+        speed = 2;
+    }
+
+    public void decreaseSpeed() {
+        speed = 1;
     }
 
     public void interact(Entity entity) {

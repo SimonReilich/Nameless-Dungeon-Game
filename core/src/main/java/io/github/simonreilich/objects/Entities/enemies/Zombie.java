@@ -3,7 +3,7 @@ package io.github.simonreilich.objects.Entities.enemies;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import io.github.simonreilich.util.Consts;
-import io.github.simonreilich.graph.RoomNode;
+import io.github.simonreilich.rooms.RoomNode;
 import io.github.simonreilich.screens.MapScreen;
 
 public class Zombie extends Enemy {
@@ -61,6 +61,8 @@ public class Zombie extends Enemy {
 
     @Override
     public void attack() {
-
+        super.mapScreen().dequeue(this);
+        super.room.removeDrawable(this);
+        this.dispose();
     }
 }

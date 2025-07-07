@@ -3,7 +3,7 @@ package io.github.simonreilich.objects.Entities.enemies;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import io.github.simonreilich.screens.MapScreen;
 import io.github.simonreilich.util.UpdateType;
-import io.github.simonreilich.graph.RoomNode;
+import io.github.simonreilich.rooms.RoomNode;
 import io.github.simonreilich.objects.Entities.Entity;
 import io.github.simonreilich.objects.Entities.enemies.elements.*;
 import io.github.simonreilich.objects.Entities.enemies.hell.Demon;

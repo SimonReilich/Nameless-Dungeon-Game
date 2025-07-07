@@ -2,7 +2,7 @@ package io.github.simonreilich.objects.Entities.enemies;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import io.github.simonreilich.graph.RoomNode;
+import io.github.simonreilich.rooms.RoomNode;
 import io.github.simonreilich.screens.MapScreen;
 
 public class Skelet extends Enemy {
@@ -15,6 +15,7 @@ public class Skelet extends Enemy {
 
     @Override
     public void move() {
+        // WIP
         if (i == 0) {
             left(1);
         } else if (i == 2) {
@@ -37,6 +38,8 @@ public class Skelet extends Enemy {
 
     @Override
     public void attack() {
-
+        super.mapScreen().dequeue(this);
+        super.room.removeDrawable(this);
+        this.dispose();
     }
 }

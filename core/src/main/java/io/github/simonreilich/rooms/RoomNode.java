@@ -1,8 +1,9 @@
-package io.github.simonreilich.graph;
+package io.github.simonreilich.rooms;
 
 import io.github.simonreilich.objects.Drawable;
 import io.github.simonreilich.objects.Entities.enemies.Enemy;
 import io.github.simonreilich.objects.Items.Coin;
+import io.github.simonreilich.objects.Items.Item;
 import io.github.simonreilich.screens.MapScreen;
 
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public class RoomNode {
                         drawables.add(Enemy.spawn(this.map.getMapProperties(x, y).get("spawn", Integer.class), x, y, mapScreen, this));
                     }
                     if (this.map.getMapProperties(x, y).containsKey("item")) {
-                        drawables.add(new Coin(x, y, mapScreen, this));
+                        drawables.add(Item.spawn(this.map.getMapProperties(x, y).get("item", Integer.class), x, y, mapScreen, this));
                     }
                 }
             }

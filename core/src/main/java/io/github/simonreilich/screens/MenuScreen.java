@@ -49,20 +49,20 @@ public class MenuScreen implements Screen {
         this.gameLogo.setCenterX(7.5f * 32);
 
         // creating the main button-container
-        this.buttonContainer = new Div(0.5f, 0, 9, 6, Align.TOP_RIGHT,
-            new Button(0, 0, 6, "start game") {
+        this.buttonContainer = new Div(0.5f, 0, 8, 6, Align.TOP_RIGHT,
+            new Button(0, 0, 5, "start game") {
                 @Override
                 public void clicked() {
                     model.startGame(heroSkins[selHero].getTexture());
                 }
             },
-            new Button(0, 0, 6, "game wiki") {
+            new Button(0, 0, 5, "game wiki") {
                 @Override
                 public void clicked() {
-
+                    Gdx.net.openURI("https://github.com/SimonReilich/Nameless-Dungeon-Game");
                 }
             },
-            new Button(0, 0, 6, "quit") {
+            new Button(0, 0, 5, "quit") {
                 @Override
                 public void clicked() {
                     Gdx.app.exit();
@@ -71,7 +71,7 @@ public class MenuScreen implements Screen {
 
         // creating the skin-chooser
         if (this.heroSkins == null || this.heroSkins.length == 0) initHeroSkins();
-        this.changeSkin = new Button(10, 1.5f, 2, "change") {
+        this.changeSkin = new Button(9, 1.5f, 3, "change") {
 
             @Override
             public void clicked() {
@@ -95,7 +95,7 @@ public class MenuScreen implements Screen {
             for (int i = 0; i < sources.length; i++) {
                 this.heroSkins[i] = new Sprite(new Texture(sources[i]));
                 this.heroSkins[i].setScale(2.0f);
-                this.heroSkins[i].setCenter(11 * 32, 4.15f * 32);
+                this.heroSkins[i].setCenter(10.5f * 32, 4.25f * 32);
                 if (sources[i].endsWith("basic.png")) {
                     this.selHero = i;
                 }
