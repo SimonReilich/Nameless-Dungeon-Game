@@ -88,10 +88,10 @@ public class MenuScreen implements Screen {
         try {
             // assets.txt is a list of all available assets
             // all pngs under sprites/heros/ are used as skins, basic.png is the default
-            BufferedReader r = new BufferedReader(new FileReader("assets/assets.txt"));
-            String[] sources; // = r.lines().filter(s -> s.startsWith("sprites/heros/") && s.endsWith(".png")).toArray(String[]::new);
+            // BufferedReader r = new BufferedReader(new FileReader("assets/assets.txt"));
+            // String[] sources = r.lines().filter(s -> s.startsWith("sprites/heros/") && s.endsWith(".png")).toArray(String[]::new);
             // reading from a .txt file doesn't work in the .jar, skins need to be hardcoded
-            sources = new String[]{
+            String[] sources = new String[]{
                 "sprites/heros/barbarian.png",
                 "sprites/heros/basic.png",
                 "sprites/heros/dwarf.png",
@@ -120,7 +120,7 @@ public class MenuScreen implements Screen {
                     this.selHero = i;
                 }
             }
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
