@@ -44,7 +44,7 @@ public class MapScreen implements Screen, DrawQueue {
 
     @Override
     public void show() {
-        this.viewport = new FitViewport(30 * 32, 20 * 32);
+        this.viewport = new FitViewport(32 * 32, 22 * 32);
         this.batch = new SpriteBatch();
         this.draw = new ArrayList<>();
 
@@ -55,8 +55,8 @@ public class MapScreen implements Screen, DrawQueue {
         this.roomNode = new RoomNode(lazyMap);
 
         // setting the players spawn location
-        this.hero.setPosX((Integer) this.roomNode.map.getLayers().get(0).getProperties().get("spawnX1"));
-        this.hero.setPosY((Integer) this.roomNode.map.getLayers().get(0).getProperties().get("spawnY1"));
+        this.hero.setPosX((Integer) this.roomNode.map.getLayers().get(0).getProperties().get("spawnX1") + 1);
+        this.hero.setPosY((Integer) this.roomNode.map.getLayers().get(0).getProperties().get("spawnY1") + 1);
 
         // add all drawables to the list
         this.roomNode.initDrawables(this);
@@ -90,7 +90,7 @@ public class MapScreen implements Screen, DrawQueue {
 
         if (this.attack) {
             this.batch.begin();
-            this.batch.draw(this.attackTex, 29 * 32, 0);
+            this.batch.draw(this.attackTex, 30 * 32, 32);
             this.batch.end();
         }
 
@@ -99,8 +99,8 @@ public class MapScreen implements Screen, DrawQueue {
         font.draw(
             this.batch,
             Integer.toString(this.score),
-            0,
-            0 + 32 / 2f + glyphLayout.height / 2f,
+            32,
+            32 + 32 / 2f + glyphLayout.height / 2f,
             32,
             Align.center,
             true);
@@ -237,8 +237,8 @@ public class MapScreen implements Screen, DrawQueue {
         }
         this.enqueue(this.hero);
 
-        this.hero.setPosX((Integer) this.roomNode.map.getLayers().get(Consts.spawnLayer).getProperties().get("spawnX" + (index + 1)));
-        this.hero.setPosY((Integer) this.roomNode.map.getLayers().get(Consts.spawnLayer).getProperties().get("spawnY" + (index + 1)));
+        this.hero.setPosX((Integer) this.roomNode.map.getLayers().get(Consts.spawnLayer).getProperties().get("spawnX" + (index + 1)) + 1);
+        this.hero.setPosY((Integer) this.roomNode.map.getLayers().get(Consts.spawnLayer).getProperties().get("spawnY" + (index + 1)) + 1);
     }
 
     @Override
@@ -332,8 +332,8 @@ public class MapScreen implements Screen, DrawQueue {
     public void setHeroSkin(Texture heroSkin) {
         this.hero.set(new Sprite(heroSkin));
 
-        this.hero.setPosX((Integer) this.roomNode.map.getLayers().get(0).getProperties().get("spawnX1"));
-        this.hero.setPosY((Integer) this.roomNode.map.getLayers().get(0).getProperties().get("spawnY1"));
+        this.hero.setPosX((Integer) this.roomNode.map.getLayers().get(0).getProperties().get("spawnX1") + 1);
+        this.hero.setPosY((Integer) this.roomNode.map.getLayers().get(0).getProperties().get("spawnY1") + 1);
     }
 
     public void increaseHeroSpeed() {

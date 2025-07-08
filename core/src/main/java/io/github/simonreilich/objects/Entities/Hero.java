@@ -56,7 +56,7 @@ public class Hero extends Entity implements Drawable {
     }
 
     public void increaseSpeed() {
-        speed = 2;
+        speed = 3;
     }
 
     public void decreaseSpeed() {
