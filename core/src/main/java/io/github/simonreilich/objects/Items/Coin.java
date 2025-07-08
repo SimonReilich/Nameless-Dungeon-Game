@@ -12,8 +12,8 @@ public class Coin extends Item {
 
     @Override
     public void consume() {
-        mapScreen.addPoints(1);
-        mapScreen.dequeue(this);
-        room.removeDrawable(this);
+        this.mapScreen.addPoints(1);
+        this.mapScreen.dequeue(this);
+        this.room.removeDrawable(this);
     }
 }

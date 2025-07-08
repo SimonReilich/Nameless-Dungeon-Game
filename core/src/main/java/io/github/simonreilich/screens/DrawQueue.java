@@ -4,6 +4,7 @@ import io.github.simonreilich.objects.Drawable;
 import io.github.simonreilich.util.UpdateType;
 
 public interface DrawQueue {
+    // used to register and manage drawables
 
     public void enqueue(Drawable drawable);
 

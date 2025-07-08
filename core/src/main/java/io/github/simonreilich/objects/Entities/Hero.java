@@ -10,7 +10,7 @@ import io.github.simonreilich.util.UpdateType;
 
 public class Hero extends Entity implements Drawable {
 
-    public boolean alive;
+    private boolean alive;
     private int speed;
 
     public Hero(MapScreen view) {
@@ -19,58 +19,62 @@ public class Hero extends Entity implements Drawable {
         this.speed = 1;
     }
 
-    public void up() {
-        if (mapScreen.inBounds(getPosX(), getPosY() + speed) && !mapScreen.occupied(getPosX(), getPosY() + speed) && dest.x == getX() && dest.y == getY() && alive) {
-            super.up(speed);
-            mapScreen.attack();
-            speed = 1;
-            mapScreen.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
-        }
-    }
-
-    public void left() {
-        if (mapScreen.inBounds(getPosX() - speed, getPosY()) && !mapScreen.occupied(getPosX() - speed, getPosY()) && dest.x == getX() && dest.y == getY() && alive) {
-            super.left(speed);
-            mapScreen.attack();
-            speed = 1;
-            mapScreen.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
-        }
-    }
-
-    public void down() {
-        if (mapScreen.inBounds(getPosX(), getPosY() - speed) && !mapScreen.occupied(getPosX(), getPosY() - speed) && dest.x == getX() && dest.y == getY() && alive) {
-            super.down(speed);
-            mapScreen.attack();
-            speed = 1;
-            mapScreen.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
-        }
-    }
-
-    public void right() {
-        if (mapScreen.inBounds(getPosX() + speed, getPosY()) && !mapScreen.occupied(getPosX() + speed, getPosY()) && dest.x == getX() && dest.y == getY() && alive) {
-            super.right(speed);
-            mapScreen.attack();
-            speed = 1;
-            mapScreen.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
-        }
-    }
-
-    public void increaseSpeed() {
-        speed = 3;
-    }
-
-    public void decreaseSpeed() {
-        speed = 1;
-    }
-
     public void interact(Entity entity) {
-        if (entity instanceof Enemy && alive) {
-            alive = false;
+        if (entity instanceof Enemy && this.alive) {
+            this.alive = false;
             this.setTexture(new Texture("sprites/misc/hero_dead.png"));
         }
     }
 
     public void update(UpdateType type, float delta) {
         return;
+    }
+
+    public void up() {
+        if (mapScreen.inBounds(getPosX(), getPosY() + this.speed) && !mapScreen.occupied(getPosX(), getPosY() + this.speed) && dest.x == getX() && dest.y == getY() && this.alive) {
+            super.up(this.speed);
+            mapScreen.attack();
+            this.speed = 1;
+            mapScreen.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
+        }
+    }
+
+    public void left() {
+        if (mapScreen.inBounds(getPosX() - this.speed, getPosY()) && !mapScreen.occupied(getPosX() - this.speed, getPosY()) && dest.x == getX() && dest.y == getY() && this.alive) {
+            super.left(this.speed);
+            mapScreen.attack();
+            this.speed = 1;
+            mapScreen.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
+        }
+    }
+
+    public void down() {
+        if (mapScreen.inBounds(getPosX(), getPosY() - this.speed) && !mapScreen.occupied(getPosX(), getPosY() - this.speed) && dest.x == getX() && dest.y == getY() && this.alive) {
+            super.down(this.speed);
+            mapScreen.attack();
+            this.speed = 1;
+            mapScreen.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
+        }
+    }
+
+    public void right() {
+        if (mapScreen.inBounds(getPosX() + this.speed, getPosY()) && !mapScreen.occupied(getPosX() + this.speed, getPosY()) && dest.x == getX() && dest.y == getY() && this.alive) {
+            super.right(this.speed);
+            mapScreen.attack();
+            this.speed = 1;
+            mapScreen.updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
+        }
+    }
+
+    public void increaseSpeed() {
+        this.speed = 3;
+    }
+
+    public void decreaseSpeed() {
+        this.speed = 1;
+    }
+
+    public boolean isAlive() {
+        return this.alive;
     }
 }

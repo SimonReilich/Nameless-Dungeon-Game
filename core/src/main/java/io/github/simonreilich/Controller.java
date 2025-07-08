@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Controller extends InputAdapter {
 
+    // Controller parses all inputs
+
     private final Model model;
     private boolean map;
 

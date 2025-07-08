@@ -13,8 +13,8 @@ public class GoldTreasure extends Item {
 
     @Override
     public void consume() {
-        mapScreen.addPoints(10);
-        mapScreen.dequeue(this);
-        room.removeDrawable(this);
+        this.mapScreen.addPoints(10);
+        this.mapScreen.dequeue(this);
+        this.room.removeDrawable(this);
     }
 }

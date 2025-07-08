@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PrioQueue {
-    // implementation of a priority queue for the A*-pathfinding
+    // implementation of a priority queue for the A*-pathfinding of DarkKnight
 
     private final Map<Vector2, Float> queue;
 

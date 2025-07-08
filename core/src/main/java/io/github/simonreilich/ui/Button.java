@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Button implements UiElement {
+    // a button that executes a function when clicked
 
     public static final Texture left = new Texture("interface/left.png");
     public static final Texture right = new Texture("interface/right.png");

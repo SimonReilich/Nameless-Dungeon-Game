@@ -13,8 +13,8 @@ public class SilverTreasure extends Item {
 
     @Override
     public void consume() {
-        mapScreen.addPoints(5);
-        mapScreen.dequeue(this);
-        room.removeDrawable(this);
+        this.mapScreen.addPoints(5);
+        this.mapScreen.dequeue(this);
+        this.room.removeDrawable(this);
     }
 }

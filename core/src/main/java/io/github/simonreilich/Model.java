@@ -9,6 +9,8 @@ import io.github.simonreilich.util.Consts;
 
 public class Model {
 
+    // Model manages the screens and the input from Controler
+
     private final View view;
     private final Controller controller;
     private final MenuScreen menuScreen;

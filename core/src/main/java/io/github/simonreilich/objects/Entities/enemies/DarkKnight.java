@@ -37,34 +37,40 @@ public class DarkKnight extends Enemy {
 
     private Vector2 pathfinding(Vector2 heroPos) {
 
-        // openList is the list of all fields, that still have unvisited neighbours
+        // workingFields is the list of all fields, that still have unvisited neighbours
         // the priority of a field corresponds to the estimated cost of a path over this field
-        PrioQueue openList = new PrioQueue();
-        // closedList is the Set of all fields, that have been completed
-        Set<Vector2> closedList = new HashSet<>();
+        PrioQueue workingFields = new PrioQueue();
+        // completedFields is the Set of all fields, that have been completed
+        Set<Vector2> completedFields = new HashSet<>();
         // pred saves the predecessor of a field for the shortest path
         Map<Vector2, Vector2> pred = new HashMap<>();
         // cost saves the total cost of a path up to a field
         Map<Vector2, Float> cost = new HashMap<>();
 
-        openList.enqueue(new Vector2(getPosX(), getPosY()), 0);
+        // we start working at the origin, this field has a cost of 0 for reaching it
+        workingFields.enqueue(new Vector2(getPosX(), getPosY()), 0);
         cost.put(new Vector2(getPosX(), getPosY()), 0.0f);
 
-        while (!openList.isEmpty()) {
-            Vector2 current = openList.removeMin();
+        // while we have fields to work on, we do
+        while (!workingFields.isEmpty()) {
+            // we first work on the field, over which the shortest path will likely go
+            Vector2 current = workingFields.removeMin();
             if (current.x == heroPos.x && current.y == heroPos.y) {
+                // if this field is equal to the destination, we have found the shortest path
                 return nextPos(new Vector2(getPosX(), getPosY()), heroPos, pred);
             }
-            closedList.add(current);
-            expandNode(current, new Vector2(current.x + 1, current.y), heroPos, openList, closedList, pred, cost);
-            expandNode(current, new Vector2(current.x - 1, current.y), heroPos, openList, closedList, pred, cost);
-            expandNode(current, new Vector2(current.x, current.y + 1), heroPos, openList, closedList, pred, cost);
-            expandNode(current, new Vector2(current.x, current.y - 1), heroPos, openList, closedList, pred, cost);
+            // we have now completed the work on the current field and move on to its neighbors
+            completedFields.add(current);
+            expandNode(current, new Vector2(current.x + 1, current.y), heroPos, workingFields, completedFields, pred, cost);
+            expandNode(current, new Vector2(current.x - 1, current.y), heroPos, workingFields, completedFields, pred, cost);
+            expandNode(current, new Vector2(current.x, current.y + 1), heroPos, workingFields, completedFields, pred, cost);
+            expandNode(current, new Vector2(current.x, current.y - 1), heroPos, workingFields, completedFields, pred, cost);
         }
         return new Vector2(getPosX(), getPosY());
     }
 
     private Vector2 nextPos(Vector2 current, Vector2 heroPos, Map<Vector2, Vector2> pred) {
+        // next pos goes back from the destination to the origin and returns the last field before origin
         Vector2 last = heroPos;
         while (!(pred.get(last).x == current.x && pred.get(last).y == current.y)) {
             last = pred.get(last);
@@ -74,20 +80,26 @@ public class DarkKnight extends Enemy {
 
     private void expandNode(Vector2 current, Vector2 suc, Vector2 dest, PrioQueue openList, Set<Vector2> closedList, Map<Vector2, Vector2> pred, Map<Vector2, Float> cost) {
         if (closedList.contains(suc) || !mapScreen().free((int) suc.x, (int) suc.y)) {
+            // if we have already worked on this field, or it is not walkable, we do nothing
             return;
         }
 
-        float tentative_g = cost.get(current) + 1;
-        if (openList.contains(suc) && tentative_g > openList.getPriority(suc)) {
+        // the cost of reaching the new field over current is the cost of reaching the current field plus one step
+        float gDash = cost.get(current) + 1;
+        if (openList.contains(suc) && gDash > openList.getPriority(suc)) {
+            // if we already found a better path to this field, we do not override it
             return;
         }
 
+        // if the program reaches this point, the path over current is the shortest path to suc
+        // so we save current as the predecessor of suc and save the costs for suc
         pred.put(suc, current);
-        cost.put(suc, tentative_g);
+        cost.put(suc, gDash);
+        // based on this cost, we adjust the guess for the cost of the shortest path to dest over suc
         if (openList.contains(suc)) {
-            openList.decreasePriority(suc, tentative_g + dist(suc, dest));
+            openList.decreasePriority(suc, gDash + dist(suc, dest));
         } else {
-            openList.enqueue(suc, tentative_g + dist(suc, dest));
+            openList.enqueue(suc, gDash + dist(suc, dest));
         }
     }
 

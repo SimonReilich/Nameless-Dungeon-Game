@@ -13,8 +13,8 @@ public class SpeedPotion extends Item {
 
     @Override
     public void consume() {
-        mapScreen.increaseHeroSpeed();
-        mapScreen.dequeue(this);
-        room.removeDrawable(this);
+        this.mapScreen.increaseHeroSpeed();
+        this.mapScreen.dequeue(this);
+        this.room.removeDrawable(this);
     }
 }

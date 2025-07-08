@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public interface UiElement {
+    // generic UI element
+
     int size = 32;
 
     void draw(SpriteBatch batch);

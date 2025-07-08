@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 public class MenuScreen implements Screen {
+    // the screen for the start menu
 
     private float time;
     private Model model;

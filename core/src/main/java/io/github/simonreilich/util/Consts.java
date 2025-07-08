@@ -1,6 +1,8 @@
 package io.github.simonreilich.util;
 
 public class Consts {
+    // useful constants
+
     // the probability of an elemental monster being small
     public static final double smallProb = 0.66;
 
@@ -30,4 +32,11 @@ public class Consts {
 
     // layer that has the spawnXi and spawnYi properties
     public static final int spawnLayer = 0;
+
+    // constants for animation of entities
+    public static final float SKIP_ANIMATION_DISTANCE = 0.5f;
+    public static final float NO_ORIGIN = 1.0f;
+    public static final float MAX_SPEED = 7.0f;
+    public static final float START_SPEED = 0.2f;
+    public static final float JUMP_HEIGHT = 8.0f;
 }

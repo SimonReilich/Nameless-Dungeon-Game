@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Set;
 
 public class MapScreen implements Screen, DrawQueue {
+    // the main-screen for the game itself
 
     private static final BitmapFont font = new BitmapFont();
     private static final GlyphLayout glyphLayout = new GlyphLayout();
@@ -236,7 +237,7 @@ public class MapScreen implements Screen, DrawQueue {
             this.hero.interact(entity);
         }
 
-        if (this.hero.alive) {
+        if (this.hero.isAlive()) {
             // every entity gets updated
             for (Drawable d : this.draw) {
                 if (d instanceof Entity) {
@@ -257,7 +258,7 @@ public class MapScreen implements Screen, DrawQueue {
     }
 
     public void toggleAttack() {
-        if (hero.alive) this.attack = !this.attack;
+        if (this.hero.isAlive()) this.attack = !this.attack;
     }
 
     public void up() {
@@ -281,7 +282,7 @@ public class MapScreen implements Screen, DrawQueue {
     }
 
     public void skip() {
-        if (this.hero.alive) {
+        if (this.hero.isAlive()) {
             updateAll(UpdateType.PlayerMove, Gdx.graphics.getDeltaTime());
             this.hero.decreaseSpeed();
         }

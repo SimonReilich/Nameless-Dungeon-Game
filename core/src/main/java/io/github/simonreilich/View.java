@@ -2,6 +2,8 @@ package io.github.simonreilich;
 
 public class View extends com.badlogic.gdx.Game {
 
+    // View manages the window, screens can be applied by calling .setScreen()
+
     @Override
     public void create() {
         new Model(this);

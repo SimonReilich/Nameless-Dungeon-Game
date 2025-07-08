@@ -11,6 +11,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 public class LazyMap {
+    // loads a this.map lazily, i.e. at first, only the name of the file is saved
+    // and the this.map itself is only then loaded in, when it is needed
 
     //private static final String[] ASSETS = initAssets();
     private static final String[] ASSETS = new String[]{
@@ -22,7 +24,7 @@ public class LazyMap {
     private TiledMap map;
 
     public LazyMap() {
-        // random map
+        // random this.map
         int i = (int) (Math.random() * ASSETS.length);
         this.source = ASSETS[i];
     }
@@ -37,26 +39,26 @@ public class LazyMap {
     }
 
     public void init() {
-        if (map == null) {
-            map = new TmxMapLoader().load(source);
+        if (this.map == null) {
+            this.map = new TmxMapLoader().load(this.source);
         }
     }
 
     public TiledMap getMap() {
         init();
-        return map;
+        return this.map;
     }
 
     public MapLayers getLayers() {
         init();
-        return map.getLayers();
+        return this.map.getLayers();
     }
 
     public MapProperties getMapProperties(int x, int y) {
         init();
         MapProperties props = new MapProperties();
-        for (int i = 0; i < map.getLayers().size(); i++) {
-            TiledMapTileLayer.Cell cell = ((TiledMapTileLayer) map.getLayers().get(i)).getCell(x, y);
+        for (int i = 0; i < this.map.getLayers().size(); i++) {
+            TiledMapTileLayer.Cell cell = ((TiledMapTileLayer) this.map.getLayers().get(i)).getCell(x, y);
             if (cell != null) {
                 props.putAll(cell.getTile().getProperties());
             }
@@ -65,8 +67,8 @@ public class LazyMap {
     }
 
     public void dispose() {
-        if (map != null) {
-            map.dispose();
+        if (this.map != null) {
+            this.map.dispose();
         }
     }
 }

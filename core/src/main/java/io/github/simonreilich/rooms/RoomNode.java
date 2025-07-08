@@ -8,9 +8,9 @@ import io.github.simonreilich.screens.MapScreen;
 import java.util.ArrayList;
 import java.util.List;
 
-
-//Repräsentiert einen Raum im Spiel als Knoten im Graphen.
 public class RoomNode {
+    // represents a room as a node in a graph with its neighbors
+    // and a list of all drawables belonging to the room
 
     public final LazyMap map;
     private List<RoomNode> neighbors;
@@ -22,34 +22,34 @@ public class RoomNode {
     }
 
     public void addNeighbor(RoomNode neighbor) {
-        neighbors.add(neighbor);
+        this.neighbors.add(neighbor);
     }
 
     public RoomNode getNeighbor(int index) {
         while (neighbors.size() <= index) {
-            neighbors.add(new RoomNode(new LazyMap()));
+            this.neighbors.add(new RoomNode(new LazyMap()));
         }
-        return neighbors.get(index);
+        return this.neighbors.get(index);
     }
 
     public void setNeighbor(RoomNode neighbor, int i) {
         while (neighbors.size() <= i) {
-            neighbors.add(new RoomNode(new LazyMap()));
+            this.neighbors.add(new RoomNode(new LazyMap()));
         }
-        neighbors.set(i, neighbor);
+        this.neighbors.set(i, neighbor);
     }
 
     public void initDrawables(MapScreen mapScreen) {
         if (drawables == null) {
-            drawables = new ArrayList<>();
+            this.drawables = new ArrayList<>();
 
             for (int x = 0; x < 30; x++) {
                 for (int y = 0; y < 20; y++) {
                     if (this.map.getMapProperties(x, y).containsKey("spawn")) {
-                        drawables.add(Enemy.spawn(this.map.getMapProperties(x, y).get("spawn", Integer.class), x, y, mapScreen, this));
+                        this.drawables.add(Enemy.spawn(this.map.getMapProperties(x, y).get("spawn", Integer.class), x, y, mapScreen, this));
                     }
                     if (this.map.getMapProperties(x, y).containsKey("item")) {
-                        drawables.add(Item.spawn(this.map.getMapProperties(x, y).get("item", Integer.class), x, y, mapScreen, this));
+                        this.drawables.add(Item.spawn(this.map.getMapProperties(x, y).get("item", Integer.class), x, y, mapScreen, this));
                     }
                 }
             }
@@ -57,10 +57,10 @@ public class RoomNode {
     }
 
     public List<Drawable> getDrawables() {
-        return drawables;
+        return this.drawables;
     }
 
     public void removeDrawable(Drawable drawable) {
-        drawables.remove(drawable);
+        this.drawables.remove(drawable);
     }
 }

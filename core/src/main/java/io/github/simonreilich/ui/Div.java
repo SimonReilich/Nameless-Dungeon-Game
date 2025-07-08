@@ -6,6 +6,7 @@ import io.github.simonreilich.util.Align;
 import io.github.simonreilich.util.Consts;
 
 public class Div implements UiElement {
+    // a container for multiple UI elements, can render with different alignment types
 
     private final Vector2 dim;
     private final Align align;

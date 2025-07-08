@@ -11,7 +11,7 @@ import io.github.simonreilich.screens.MapScreen;
 
 public abstract class Item extends Sprite implements Drawable {
 
-    private final Texture shadow;
+    private static final Texture shadow = new Texture("sprites/misc/shadow.png");
 
     protected MapScreen mapScreen;
     protected RoomNode room;
@@ -20,11 +20,7 @@ public abstract class Item extends Sprite implements Drawable {
         super(sprite);
         setPosX(x);
         setPosY(y);
-
         this.room = room;
-
-        shadow = new Texture("sprites/misc/shadow.png");
-
         this.mapScreen = mapScreen;
     }
 
