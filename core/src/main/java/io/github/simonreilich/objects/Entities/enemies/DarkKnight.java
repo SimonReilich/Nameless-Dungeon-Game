@@ -7,8 +7,9 @@ import io.github.simonreilich.rooms.RoomNode;
 import io.github.simonreilich.screens.MapScreen;
 import io.github.simonreilich.util.PrioQueue;
 
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.PriorityQueue;
+import java.util.Map;
 import java.util.Set;
 
 public class DarkKnight extends Enemy {
@@ -21,49 +22,77 @@ public class DarkKnight extends Enemy {
     public void move() {
         // DarkKnight will chase the player, using A* for pathfinding
         Vector2 heroPos = mapScreen.getHeroDestination();
-        pathfinding(heroPos);
+        Vector2 step = pathfinding(heroPos);
+
+        if (step.x > this.getPosX()) {
+            right(1);
+        } else if (step.x < this.getPosX()) {
+            left(1);
+        } else if (step.y > this.getPosY()) {
+            up(1);
+        } else if (step.y < this.getPosY()) {
+            down(1);
+        }
     }
 
-    private void pathfinding(Vector2 heroPos) {
+    private Vector2 pathfinding(Vector2 heroPos) {
+
+        // openList is the list of all fields, that still have unvisited neighbours
+        // the priority of a field corresponds to the estimated cost of a path over this field
         PrioQueue openList = new PrioQueue();
+        // closedList is the Set of all fields, that have been completed
         Set<Vector2> closedList = new HashSet<>();
+        // pred saves the predecessor of a field for the shortest path
+        Map<Vector2, Vector2> pred = new HashMap<>();
+        // cost saves the total cost of a path up to a field
+        Map<Vector2, Float> cost = new HashMap<>();
 
         openList.enqueue(new Vector2(getPosX(), getPosY()), 0);
+        cost.put(new Vector2(getPosX(), getPosY()), 0.0f);
 
         while (!openList.isEmpty()) {
             Vector2 current = openList.removeMin();
             if (current.x == heroPos.x && current.y == heroPos.y) {
-                System.out.println("Path found");
-                return;
+                return nextPos(new Vector2(getPosX(), getPosY()), heroPos, pred);
             }
             closedList.add(current);
-            expandNode(current, openList, closedList);
+            expandNode(current, new Vector2(current.x + 1, current.y), heroPos, openList, closedList, pred, cost);
+            expandNode(current, new Vector2(current.x - 1, current.y), heroPos, openList, closedList, pred, cost);
+            expandNode(current, new Vector2(current.x, current.y + 1), heroPos, openList, closedList, pred, cost);
+            expandNode(current, new Vector2(current.x, current.y - 1), heroPos, openList, closedList, pred, cost);
         }
-        System.out.println("No Path found");
+        return new Vector2(getPosX(), getPosY());
     }
 
-    private void expandNode(Vector2 current, PrioQueue openList, Set<Vector2> closedList) {
-        Vector2 suc;
-        // top
-        suc = new Vector2(current.x, current.y + 1);
-        if (mapScreen().inBounds((int) suc.x, (int) suc.y) && !closedList.contains(suc)) {
-
+    private Vector2 nextPos(Vector2 current, Vector2 heroPos, Map<Vector2, Vector2> pred) {
+        Vector2 last = heroPos;
+        while (!(pred.get(last).x == current.x && pred.get(last).y == current.y)) {
+            last = pred.get(last);
         }
-        // right
-        suc = new Vector2(current.x + 1, current.y);
-        if (mapScreen().inBounds((int) suc.x, (int) suc.y) && !closedList.contains(suc)) {
+        return last;
+    }
 
+    private void expandNode(Vector2 current, Vector2 suc, Vector2 dest, PrioQueue openList, Set<Vector2> closedList, Map<Vector2, Vector2> pred, Map<Vector2, Float> cost) {
+        if (closedList.contains(suc) || !mapScreen().free((int) suc.x, (int) suc.y)) {
+            return;
         }
-        // bottom
-        suc = new Vector2(current.x, current.y - 1);
-        if (mapScreen().inBounds((int) suc.x, (int) suc.y) && !closedList.contains(suc)) {
 
+        float tentative_g = cost.get(current) + 1;
+        if (openList.contains(suc) && tentative_g > openList.getPriority(suc)) {
+            return;
         }
-        // left
-        suc = new Vector2(current.x - 1, current.y);
-        if (mapScreen().inBounds((int) suc.x, (int) suc.y) && !closedList.contains(suc)) {
 
+        pred.put(suc, current);
+        cost.put(suc, tentative_g);
+        if (openList.contains(suc)) {
+            openList.decreasePriority(suc, tentative_g + dist(suc, dest));
+        } else {
+            openList.enqueue(suc, tentative_g + dist(suc, dest));
         }
+    }
+
+    private float dist(Vector2 p1, Vector2 p2) {
+        return (float) Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
     }
 
     @Override
@@ -76,9 +105,5 @@ public class DarkKnight extends Enemy {
     @Override
     public void attack() {
 
-    }
-
-    private double metric(int x, int y, int playerX, int playerY) {
-        return Math.sqrt(Math.pow(x - playerX, 2) + Math.pow(y - playerY, 2));
     }
 }

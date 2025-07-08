@@ -5,15 +5,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import io.github.simonreilich.objects.Entities.enemies.elements.Gold;
-import io.github.simonreilich.rooms.RoomNode;
 import io.github.simonreilich.objects.Drawable;
+import io.github.simonreilich.rooms.RoomNode;
 import io.github.simonreilich.screens.MapScreen;
 
 public abstract class Item extends Sprite implements Drawable {
-
-    protected float startX;
-    protected float startY;
 
     private final Texture shadow;
 
@@ -47,20 +43,20 @@ public abstract class Item extends Sprite implements Drawable {
         }
     }
 
-    public void setPosX(int x) {
-        setX(x * 32 + ((32 - this.getWidth()) / 2));
-    }
-
-    public void setPosY(int y) {
-        setY(y * 32 + 6);
-    }
-
     public int getPosX() {
         return (int) (getX() / 32);
     }
 
+    public void setPosX(int x) {
+        setX(x * 32 + ((32 - this.getWidth()) / 2));
+    }
+
     public int getPosY() {
         return (int) (getY() / 32);
+    }
+
+    public void setPosY(int y) {
+        setY(y * 32 + 6);
     }
 
     @Override

@@ -2,17 +2,17 @@ package io.github.simonreilich.objects.Entities.enemies.elements;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import io.github.simonreilich.util.Consts;
-import io.github.simonreilich.rooms.RoomNode;
 import io.github.simonreilich.objects.Entities.enemies.Enemy;
+import io.github.simonreilich.rooms.RoomNode;
 import io.github.simonreilich.screens.MapScreen;
+import io.github.simonreilich.util.Consts;
 
 public class Earth extends Enemy {
 
     private int i;
 
     public Earth(int x, int y, MapScreen mapScreen, RoomNode room) {
-        super(new Sprite(new Texture("sprites/entities/elements/earth/elemental_earth.png")) , x, y, mapScreen, room);
+        super(new Sprite(new Texture("sprites/entities/elements/earth/elemental_earth.png")), x, y, mapScreen, room);
 
         if (Math.random() < Consts.smallProb) {
             this.getTexture().dispose();
@@ -36,27 +36,27 @@ public class Earth extends Enemy {
             super.down(1);
         } else if (i == 4) {
             super.right(1);
-        }  else if (i == 5) {
+        } else if (i == 5) {
             super.right(1);
-        }  else if (i == 6) {
+        } else if (i == 6) {
             super.left(1);
-        }   else if (i == 7) {
+        } else if (i == 7) {
             super.left(1);
-        }   else if (i == 8) {
+        } else if (i == 8) {
             super.down(1);
-        }   else if (i == 9) {
+        } else if (i == 9) {
             super.down(1);
-        }   else if (i == 10) {
+        } else if (i == 10) {
             super.up(1);
-        }   else if (i == 11) {
+        } else if (i == 11) {
             super.up(1);
-        }    else if (i == 12) {
+        } else if (i == 12) {
             super.left(1);
-        }    else if (i == 13) {
+        } else if (i == 13) {
             super.left(1);
         } else if (i == 14) {
             super.right(1);
-        }   else if (i == 15) {
+        } else if (i == 15) {
             super.right(1);
         }
     }

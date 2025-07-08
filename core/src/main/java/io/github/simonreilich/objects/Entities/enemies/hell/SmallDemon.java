@@ -2,8 +2,8 @@ package io.github.simonreilich.objects.Entities.enemies.hell;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import io.github.simonreilich.rooms.RoomNode;
 import io.github.simonreilich.objects.Entities.enemies.Enemy;
+import io.github.simonreilich.rooms.RoomNode;
 import io.github.simonreilich.screens.MapScreen;
 
 public class SmallDemon extends Enemy {
@@ -11,7 +11,7 @@ public class SmallDemon extends Enemy {
     private int i;
 
     public SmallDemon(int x, int y, MapScreen mapScreen, RoomNode room) {
-        super(new Sprite(new Texture("sprites/entities/hell/small/bies.png")) , x, y, mapScreen, room);
+        super(new Sprite(new Texture("sprites/entities/hell/small/bies.png")), x, y, mapScreen, room);
 
         double variant = Math.random();
         if (variant < 0.2) {

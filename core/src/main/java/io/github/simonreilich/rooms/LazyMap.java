@@ -12,9 +12,9 @@ import java.io.FileReader;
 
 public class LazyMap {
 
-    private TiledMap map;
-    private final String source;
     static final String[] ASSETS = initAssets();
+    private final String source;
+    private TiledMap map;
 
     public LazyMap(String source) {
         this.source = source;
@@ -24,6 +24,15 @@ public class LazyMap {
         // random map
         int i = (int) (Math.random() * ASSETS.length);
         this.source = ASSETS[i];
+    }
+
+    private static String[] initAssets() {
+        try {
+            BufferedReader r = new BufferedReader(new FileReader("assets/assets.txt"));
+            return r.lines().filter(s -> !s.contains("template") && s.startsWith("maps/") && s.endsWith(".tmx")).toArray(String[]::new);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void init() {
@@ -57,15 +66,6 @@ public class LazyMap {
     public void dispose() {
         if (map != null) {
             map.dispose();
-        }
-    }
-
-    private static String[] initAssets() {
-        try {
-            BufferedReader r = new BufferedReader(new FileReader("assets/assets.txt"));
-            return r.lines().filter(s -> !s.contains("template") && s.startsWith("maps/") && s.endsWith(".tmx")).toArray(String[]::new);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         }
     }
 }

@@ -2,7 +2,6 @@ package io.github.simonreilich.rooms;
 
 import io.github.simonreilich.objects.Drawable;
 import io.github.simonreilich.objects.Entities.enemies.Enemy;
-import io.github.simonreilich.objects.Items.Coin;
 import io.github.simonreilich.objects.Items.Item;
 import io.github.simonreilich.screens.MapScreen;
 
@@ -13,9 +12,9 @@ import java.util.List;
 //Repräsentiert einen Raum im Spiel als Knoten im Graphen.
 public class RoomNode {
 
+    public final LazyMap map;
     private List<RoomNode> neighbors;
     private List<Drawable> drawables;
-    public final LazyMap map;
 
     public RoomNode(LazyMap map) {
         this.neighbors = new ArrayList<>();
@@ -31,10 +30,6 @@ public class RoomNode {
             neighbors.add(new RoomNode(new LazyMap()));
         }
         return neighbors.get(index);
-    }
-
-    public List<RoomNode> getNeighbors() {
-        return neighbors;
     }
 
     public void setNeighbor(RoomNode neighbor, int i) {

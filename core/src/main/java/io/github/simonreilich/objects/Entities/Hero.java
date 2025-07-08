@@ -3,10 +3,10 @@ package io.github.simonreilich.objects.Entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import io.github.simonreilich.screens.MapScreen;
-import io.github.simonreilich.util.UpdateType;
 import io.github.simonreilich.objects.Drawable;
 import io.github.simonreilich.objects.Entities.enemies.Enemy;
+import io.github.simonreilich.screens.MapScreen;
+import io.github.simonreilich.util.UpdateType;
 
 public class Hero extends Entity implements Drawable {
 
@@ -20,7 +20,7 @@ public class Hero extends Entity implements Drawable {
     }
 
     public void up() {
-        if (mapScreen.inBounds(getPosX(), getPosY() + speed) && !mapScreen.occupied(getPosX(), getPosY() + speed) && destinationX == getX() && destinationY == getY() && alive) {
+        if (mapScreen.inBounds(getPosX(), getPosY() + speed) && !mapScreen.occupied(getPosX(), getPosY() + speed) && dest.x == getX() && dest.y == getY() && alive) {
             super.up(speed);
             mapScreen.attack();
             speed = 1;
@@ -29,7 +29,7 @@ public class Hero extends Entity implements Drawable {
     }
 
     public void left() {
-        if (mapScreen.inBounds(getPosX() - speed, getPosY()) && !mapScreen.occupied(getPosX() - speed, getPosY()) && destinationX == getX() && destinationY == getY()  && alive) {
+        if (mapScreen.inBounds(getPosX() - speed, getPosY()) && !mapScreen.occupied(getPosX() - speed, getPosY()) && dest.x == getX() && dest.y == getY() && alive) {
             super.left(speed);
             mapScreen.attack();
             speed = 1;
@@ -38,7 +38,7 @@ public class Hero extends Entity implements Drawable {
     }
 
     public void down() {
-        if (mapScreen.inBounds(getPosX(), getPosY() - speed) && !mapScreen.occupied(getPosX(), getPosY() - speed) && destinationX == getX() && destinationY == getY() && alive) {
+        if (mapScreen.inBounds(getPosX(), getPosY() - speed) && !mapScreen.occupied(getPosX(), getPosY() - speed) && dest.x == getX() && dest.y == getY() && alive) {
             super.down(speed);
             mapScreen.attack();
             speed = 1;
@@ -47,7 +47,7 @@ public class Hero extends Entity implements Drawable {
     }
 
     public void right() {
-        if (mapScreen.inBounds(getPosX() + speed, getPosY()) && !mapScreen.occupied(getPosX() + speed, getPosY()) && destinationX == getX() && destinationY == getY() && alive) {
+        if (mapScreen.inBounds(getPosX() + speed, getPosY()) && !mapScreen.occupied(getPosX() + speed, getPosY()) && dest.x == getX() && dest.y == getY() && alive) {
             super.right(speed);
             mapScreen.attack();
             speed = 1;

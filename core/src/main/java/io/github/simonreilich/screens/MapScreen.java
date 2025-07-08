@@ -12,13 +12,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import io.github.simonreilich.rooms.LazyMap;
-import io.github.simonreilich.rooms.RoomNode;
 import io.github.simonreilich.objects.Drawable;
 import io.github.simonreilich.objects.Entities.Entity;
 import io.github.simonreilich.objects.Entities.Hero;
 import io.github.simonreilich.objects.Entities.enemies.Enemy;
 import io.github.simonreilich.objects.Items.Item;
+import io.github.simonreilich.rooms.LazyMap;
+import io.github.simonreilich.rooms.RoomNode;
 import io.github.simonreilich.util.Consts;
 import io.github.simonreilich.util.UpdateType;
 
@@ -29,6 +29,8 @@ import java.util.Set;
 
 public class MapScreen implements Screen, DrawQueue {
 
+    private static final BitmapFont font = new BitmapFont();
+    private static final GlyphLayout glyphLayout = new GlyphLayout();
     private Hero hero;
     private int score;
     private Viewport viewport;
@@ -38,9 +40,6 @@ public class MapScreen implements Screen, DrawQueue {
     private OrthogonalTiledMapRenderer renderer;
     private boolean attack;
     private Texture attackTex;
-
-    private static final BitmapFont font = new BitmapFont();
-    private static final GlyphLayout glyphLayout = new GlyphLayout();
 
     @Override
     public void show() {
@@ -199,32 +198,6 @@ public class MapScreen implements Screen, DrawQueue {
     @Override
     public void dequeueAll() {
         this.draw.clear();
-    }
-
-    @Override
-    public void dequeueAndDispose(Drawable drawable) {
-        dequeue(drawable);
-        if (drawable != this.hero) drawable.dispose();
-    }
-
-    @Override
-    public void dequeueAndDisposeAll() {
-        for (Drawable d : this.draw) {
-            if (d != this.hero) d.dispose();
-        }
-        this.draw.clear();
-    }
-
-    @Override
-    public void prioritize(Drawable drawable) {
-        this.draw.remove(drawable);
-        this.draw.add(drawable);
-    }
-
-    @Override
-    public void deprioritize(Drawable drawable) {
-        this.draw.remove(drawable);
-        this.draw.add(0, drawable);
     }
 
     private void reloadMap(int index) {

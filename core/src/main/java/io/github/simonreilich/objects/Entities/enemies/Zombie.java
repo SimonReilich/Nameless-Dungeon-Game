@@ -2,9 +2,9 @@ package io.github.simonreilich.objects.Entities.enemies;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import io.github.simonreilich.util.Consts;
 import io.github.simonreilich.rooms.RoomNode;
 import io.github.simonreilich.screens.MapScreen;
+import io.github.simonreilich.util.Consts;
 
 public class Zombie extends Enemy {
 

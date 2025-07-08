@@ -2,8 +2,8 @@ package io.github.simonreilich.objects.Entities.enemies.hell;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import io.github.simonreilich.rooms.RoomNode;
 import io.github.simonreilich.objects.Entities.enemies.Enemy;
+import io.github.simonreilich.rooms.RoomNode;
 import io.github.simonreilich.screens.MapScreen;
 
 public class Demonolog extends Enemy {

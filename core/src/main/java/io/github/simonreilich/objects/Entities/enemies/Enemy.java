@@ -1,9 +1,6 @@
 package io.github.simonreilich.objects.Entities.enemies;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import io.github.simonreilich.screens.MapScreen;
-import io.github.simonreilich.util.UpdateType;
-import io.github.simonreilich.rooms.RoomNode;
 import io.github.simonreilich.objects.Entities.Entity;
 import io.github.simonreilich.objects.Entities.enemies.elements.*;
 import io.github.simonreilich.objects.Entities.enemies.hell.Demon;
@@ -12,6 +9,9 @@ import io.github.simonreilich.objects.Entities.enemies.hell.SmallDemon;
 import io.github.simonreilich.objects.Entities.enemies.orcs.Goblin;
 import io.github.simonreilich.objects.Entities.enemies.orcs.Ogre;
 import io.github.simonreilich.objects.Entities.enemies.orcs.Orc;
+import io.github.simonreilich.rooms.RoomNode;
+import io.github.simonreilich.screens.MapScreen;
+import io.github.simonreilich.util.UpdateType;
 
 public abstract class Enemy extends Entity {
 
