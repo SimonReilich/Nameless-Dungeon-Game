@@ -12,13 +12,14 @@ import java.io.FileReader;
 
 public class LazyMap {
 
-    static final String[] ASSETS = initAssets();
+    //private static final String[] ASSETS = initAssets();
+    private static final String[] ASSETS = new String[]{
+        "maps/map01.tmx",
+        "maps/map02.tmx",
+        "maps/map03.tmx"
+    };
     private final String source;
     private TiledMap map;
-
-    public LazyMap(String source) {
-        this.source = source;
-    }
 
     public LazyMap() {
         // random map

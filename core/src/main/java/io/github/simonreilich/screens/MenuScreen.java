@@ -89,7 +89,27 @@ public class MenuScreen implements Screen {
             // assets.txt is a list of all available assets
             // all pngs under sprites/heros/ are used as skins, basic.png is the default
             BufferedReader r = new BufferedReader(new FileReader("assets/assets.txt"));
-            String[] sources = r.lines().filter(s -> s.startsWith("sprites/heros/") && s.endsWith(".png")).toArray(String[]::new);
+            String[] sources; // = r.lines().filter(s -> s.startsWith("sprites/heros/") && s.endsWith(".png")).toArray(String[]::new);
+            // reading from a .txt file doesn't work in the .jar, skins need to be hardcoded
+            sources = new String[]{
+                "sprites/heros/barbarian.png",
+                "sprites/heros/basic.png",
+                "sprites/heros/dwarf.png",
+                "sprites/heros/dwarf_2.png",
+                "sprites/heros/elf.png",
+                "sprites/heros/elf_2.png",
+                "sprites/heros/knight_blue.png",
+                "sprites/heros/knight_green.png",
+                "sprites/heros/knight_yellow.png",
+                "sprites/heros/mage.png",
+                "sprites/heros/merchant.png",
+                "sprites/heros/merchant_2.png",
+                "sprites/heros/paladin.png",
+                "sprites/heros/sage.png",
+                "sprites/heros/trickster.png",
+                "sprites/heros/wizzard.png",
+                "sprites/heros/wrestler.png"
+            };
             this.heroSkins = new Sprite[sources.length];
             this.selHero = 0;
             for (int i = 0; i < sources.length; i++) {
